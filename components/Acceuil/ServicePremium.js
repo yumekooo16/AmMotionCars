@@ -1,0 +1,45 @@
+import React, { useRef, useEffect, useState } from "react";
+
+export default function ServicePremium() {
+  const sectionRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 100) {
+        setVisible(true);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      className={`w-full flex flex-col items-center py-12 px-4 md:py-16 md:px-8 transition-all duration-700 ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}
+    >
+      {/* Image responsive */}
+      <img
+        src="./image/glcammotion.jpg"
+        alt="Service Premium"
+        className="rounded-2xl shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto mb-6 object-cover"
+      />
+
+      {/* Titre */}
+      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center text-white mb-4">
+        Service Premium
+      </h2>
+
+      {/* Description */}
+      <p className="text-lg sm:text-xl md:text-2xl text-center text-white font-light">
+        Chauffeur privé &amp; Transfer VIP
+      </p>
+    </section>
+  );
+}
