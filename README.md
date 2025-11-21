@@ -17,21 +17,6 @@ cd ammotion-cars
 npm install
 ```
 
-### Configuration
-
-Créez un fichier `.env.local` à la racine du projet :
-
-```env
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=votre_url_supabase
-NEXT_PUBLIC_SUPABASE_ANON_KEY=votre_cle_anon_supabase
-
-# Email
-RESEND_API_KEY=votre_cle_api_resend
-EMAIL_FROM=contact@ammotioncars.com
-EMAIL_TO=destination@ammotioncars.com
-```
-
 ### Lancer le serveur de développement
 
 ```bash
@@ -99,57 +84,6 @@ ammotion-cars/
 
 ---
 
-## 🗄️ Configuration de la base de données
-
-### Créer la table dans Supabase
-
-Exécutez cette requête SQL dans votre dashboard Supabase :
-
-```sql
-CREATE TABLE contacts (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  nom VARCHAR(100) NOT NULL,
-  prenom VARCHAR(100) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  telephone VARCHAR(20) NOT NULL,
-  service VARCHAR(100) NOT NULL,
-  date DATE,
-  message TEXT NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Index pour les performances
-CREATE INDEX idx_contacts_created_at ON contacts(created_at DESC);
-
--- Row Level Security
-ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Enable insert for anon users" 
-ON contacts FOR INSERT 
-TO anon 
-WITH CHECK (true);
-```
-
----
-
-## 🎨 Personnalisation
-
-### Couleurs
-
-Modifiez `tailwind.config.js` :
-
-```javascript
-module.exports = {
-  theme: {
-    extend: {
-      colors: {
-        'am-yellow': '#fbbf24',
-        'am-gray': '#5f6364',
-      }
-    }
-  }
-}
-```
 
 ### Contenu
 
@@ -170,20 +104,7 @@ npm run lint        # Vérifier le code
 
 ---
 
-## 🚀 Déploiement sur Vercel
 
-Le moyen le plus simple de déployer votre application Next.js est d'utiliser la [plateforme Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
-
-### Étapes :
-
-1. Créez un compte sur [Vercel](https://vercel.com/)
-2. Importez votre repository GitHub
-3. Ajoutez vos variables d'environnement dans les settings Vercel
-4. Déployez !
-
-Consultez la [documentation de déploiement Next.js](https://nextjs.org/docs/app/building-your-application/deploying) pour plus de détails.
-
----
 
 ## 📚 En savoir plus
 
@@ -195,22 +116,6 @@ Pour en savoir plus sur Next.js, consultez les ressources suivantes :
 
 ---
 
-## 🐛 Résolution de problèmes
-
-### Le formulaire ne fonctionne pas
-- Vérifiez vos variables d'environnement dans `.env.local`
-- Vérifiez que Supabase est correctement configuré
-- Regardez la console du navigateur pour les erreurs
-
-### Les images ne s'affichent pas
-- Vérifiez que les images sont dans `public/image/`
-- Vérifiez les chemins (utilisez `/image/nom.jpg`)
-
-### Erreur 404 sur les pages
-- Redémarrez le serveur de développement
-- Vérifiez que les fichiers existent dans les bons dossiers
-
----
 
 ## 📞 Contact
 
