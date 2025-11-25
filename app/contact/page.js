@@ -172,7 +172,7 @@ export default function Contact() {
                 <label htmlFor="date" className="block text-sm font-light text-gray-400 mb-2">Date souhaitée</label>
                 <input
                   type="date" id="date" name="date" value={formData.date} onChange={handleChange}
-                  className="w-full bg-neutral-950 border border-gray-800 px-4 py-3 text-white font-light focus:outline-none focus:border-white transition-colors"
+                  className="w-50 bg-neutral-950 border border-gray-800 px-4 py-3 text-white font-light focus:outline-none focus:border-white transition-colors"
                 />
               </div>
 
