@@ -46,7 +46,7 @@ export default function Services() {
       <section className="relative w-full bg-black text-white flex flex-col justify-center items-center py-12 md:py-16 px-6 md:px-8">
         <div className="max-w-4xl text-center">
           <h2 className="text-2xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">
-            Vivez l'expérience <span className="text-[#5f6364]">AM Motion</span>
+            Vivez l&apos;expérience <span className="text-[#5f6364]">AM Motion</span>
             <br />
             élégance, prestige et confort à chaque trajet.
           </h2>

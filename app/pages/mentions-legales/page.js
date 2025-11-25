@@ -34,7 +34,7 @@ export default function MentionsLegales() {
         <div className="mb-20 text-center">
           <p className="text-gray-400 text-lg font-light leading-relaxed">
             Conformément aux dispositions de la loi n° 2004-575 du 21 juin 2004 pour la confiance 
-            dans l'économie numérique, nous vous informons des mentions légales relatives au site.
+            dans l&apos;économie numérique, nous vous informons des mentions légales relatives au site.
           </p>
         </div>
 
@@ -101,8 +101,8 @@ export default function MentionsLegales() {
               Propriété intellectuelle
             </h2>
             <p className="text-gray-400 font-light leading-relaxed">
-              L'ensemble de ce site relève de la législation française et internationale sur le droit 
-              d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés.
+              L&apos;ensemble de ce site relève de la législation française et internationale sur le droit 
+              d&apos;auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés.
             </p>
           </article>
 
@@ -112,10 +112,10 @@ export default function MentionsLegales() {
               Protection des données personnelles
             </h2>
             <p className="text-gray-400 font-light leading-relaxed mb-4">
-              Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant.
+              Conformément au RGPD, vous disposez d&apos;un droit d&apos;accès, de rectification et de suppression des données vous concernant.
             </p>
             <p className="text-gray-400 font-light leading-relaxed">
-              Pour exercer ces droits, veuillez nous contacter à l'adresse email communiquée par la société (si disponible). Actuellement : <span className="text-white">non communiqué</span>.
+              Pour exercer ces droits, veuillez nous contacter à l&apos;adresse email communiquée par la société (si disponible). Actuellement : <span className="text-white">non communiqué</span>.
             </p>
             <Link 
               href="/politique-confidentialite" 
@@ -131,8 +131,8 @@ export default function MentionsLegales() {
               Cookies
             </h2>
             <p className="text-gray-400 font-light leading-relaxed">
-              Le site peut être amené à vous demander l'acceptation des cookies pour des besoins 
-              de statistiques et d'affichage. Vous pouvez désactiver les cookies dans 
+              Le site peut être amené à vous demander l&apos;acceptation des cookies pour des besoins 
+              de statistiques et d&apos;affichage. Vous pouvez désactiver les cookies dans 
               les paramètres de votre navigateur.
             </p>
           </article>
@@ -155,7 +155,7 @@ export default function MentionsLegales() {
             href="/" 
             className="inline-block text-white hover:text-gray-400 transition-colors font-light tracking-wide"
           >
-            ← Retour à l'accueil
+            ← Retour à l&apos;accueil
           </Link>
         </div>
 

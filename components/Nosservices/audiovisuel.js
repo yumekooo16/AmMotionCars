@@ -35,7 +35,7 @@ export default function Audiovisuel() {
       </div>
 
       <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-white mb-3">Clips & Shootings</h2>
-      <p className="text-sm md:text-base lg:text-lg text-center text-white font-light max-w-2xl">Sublimez vos productions avec nos véhicules d'exception</p>
+      <p className="text-sm md:text-base lg:text-lg text-center text-white font-light max-w-2xl">Sublimez vos productions avec nos véhicules d&apos;exception</p>
     </section>
   );
 }

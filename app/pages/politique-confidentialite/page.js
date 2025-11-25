@@ -165,7 +165,7 @@ export default function PolitiqueConfidentialite() {
             href="/" 
             className="text-white hover:text-gray-400 transition-colors font-light tracking-wide"
           >
-            Retour à l'accueil
+            Retour à l&apos;accueil
           </Link>
         </div>
       </section>

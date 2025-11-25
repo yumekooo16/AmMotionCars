@@ -25,7 +25,7 @@ export default function Apropos() {
             À propos
           </h1>
           <p className="text-base md:text-xl mt-4 md:mt-8 font-light max-w-3xl opacity-90">
-            L'excellence automobile au service de vos moments d'exception
+            L&apos;excellence automobile au service de vos moments d&apos;exception
           </p>
         </div>
       </section>
@@ -34,11 +34,11 @@ export default function Apropos() {
       <section className="bg-black text-white py-32 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl font-light mb-12 tracking-wide">
-            L'essence d'AM Motion Cars
+            L&apos;essence d&apos;AM Motion Cars
           </h2>
           <p className="text-lg md:text-xl leading-relaxed text-gray-400 font-light">
             Fondée à Paris, AM Motion Cars est spécialisée dans la location de véhicules de prestige 
-            et la conciergerie automobile haut de gamme. Nous offrons bien plus qu'un simple trajet : 
+            et la conciergerie automobile haut de gamme. Nous offrons bien plus qu&apos;un simple trajet : 
             une expérience élégante, sur mesure et inoubliable, pensée pour une clientèle exigeante.
           </p>
         </div>
@@ -62,7 +62,7 @@ export default function Apropos() {
           <div className="text-center">
             <h3 className="text-2xl font-light mb-4 tracking-wide">Excellence</h3>
             <p className="text-gray-500 text-base font-light leading-relaxed">
-              De la préparation à l'accueil, rien n'est laissé au hasard
+              De la préparation à l&apos;accueil, rien n&apos;est laissé au hasard
             </p>
           </div>
         </div>
@@ -89,7 +89,7 @@ export default function Apropos() {
             Notre vision
           </h2>
           <p className="text-lg md:text-xl leading-relaxed text-gray-400 font-light">
-            Chez AM Motion Cars, nous croyons que le luxe se trouve dans l'expérience, 
+            Chez AM Motion Cars, nous croyons que le luxe se trouve dans l&apos;expérience, 
             pas seulement dans la voiture. Chaque déplacement devient une histoire, 
             chaque client une priorité. Notre ambition : redéfinir la mobilité haut de gamme, 
             avec passion et discrétion.
@@ -101,7 +101,7 @@ export default function Apropos() {
       <section className="bg-black text-white py-32 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-light mb-6 tracking-wide">
-            Découvrez l'expérience AM Motion Cars
+            Découvrez l&apos;expérience AM Motion Cars
           </h2>
           <p className="text-lg text-gray-500 mb-12 font-light">
             Réservez dès maintenant votre trajet ou contactez notre équipe pour un service sur mesure
