@@ -118,7 +118,7 @@ export default function MentionsLegales() {
               Pour exercer ces droits, veuillez nous contacter à l&apos;adresse email communiquée par la société (si disponible). Actuellement : <span className="text-white">non communiqué</span>.
             </p>
             <Link 
-              href="/politique-confidentialite" 
+              href="/pages/politique-confidentialite" 
               className="inline-block mt-4 text-white hover:text-gray-300 transition-colors border-b border-white/30 hover:border-gray-300"
             >
               Consulter notre politique de confidentialité

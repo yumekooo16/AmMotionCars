@@ -89,7 +89,7 @@ export default function Contact() {
     <div className="bg-black">
       {/* Hero */}
       <section className="relative w-full h-screen overflow-hidden">
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 w-full h-full">
           <Image
             src="/image/Gemini_Generated_Image_aqt37waqt37waqt3.png"
             alt="Contact AM Motion"
