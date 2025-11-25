@@ -135,9 +135,11 @@ Les demandes urgentes sont possibles selon disponibilité."
 
           <div className="text-center mt-16">
             <p className="text-gray-400 mb-6">Vous avez une autre question ?</p>
+            <Link href="/contact">
             <button className="bg-white -400  -500 text-gray-900 font-semibold rounded-xl px-8 py-4 text-lg transition mb-0">
               Contactez-nous
             </button>
+            </Link>
           </div>
         </div>
       </section>
