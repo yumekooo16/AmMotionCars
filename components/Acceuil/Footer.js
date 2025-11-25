@@ -16,9 +16,9 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4">Plan du site</h4>
             <ul className="space-y-2 text-gray-400">
               <li><Link href="/" className="hover:text-yellow-400 transition">Accueil</Link></li>
-              <li><Link href="/services" className="hover:text-yellow-400 transition">Services</Link></li>
-              <li><Link href="/Apropos" className="hover:text-yellow-400 transition">À Propos</Link></li>
-              <li><Link href="/Contact" className="hover:text-yellow-400 transition">Contact</Link></li>
+              <li><Link href="/pages/services" className="hover:text-yellow-400 transition">Services</Link></li>
+              <li><Link href="/pages/Apropos" className="hover:text-yellow-400 transition">À Propos</Link></li>
+              <li><Link href="/pages/Contact" className="hover:text-yellow-400 transition">Contact</Link></li>
             </ul>
           </div>
 
