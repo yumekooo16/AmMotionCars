@@ -12,7 +12,7 @@ export default function Header() {
       <div className="flex items-center">
         <Link href="/" className="inline-block">
           <Image 
-            src="/motioncar.jpg" 
+            src="/image/motioncar.jpg" 
             alt="AM Motion Cars" 
             width={60} 
             height={60}
