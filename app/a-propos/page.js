@@ -11,14 +11,14 @@ export default function Apropos() {
       <section className="relative w-full h-screen overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/image/servicesauditglc.jpg"
+            src="/image/a35xrs3.png"
             alt="À propos AM Motion"
             fill
             className="object-cover object-center brightness-50"
             priority
             sizes="100vw"
           />
-        </div>
+        </div>  
 
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white z-10 px-6">
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-wide">

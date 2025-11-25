@@ -17,6 +17,7 @@ export default function Vehicule() {
         { src: "/image/prixglc63samg.jpg", alt: "Mercedes GLC 63S AMG" },
         { src: "/image/prixglc43amg.jpg", alt: "Mercedes GLC 43 AMG" },
         { src: "/image/prixclassg63amg.jpg", alt: "Mercedes G63 AMG" },
+        { src: "/image/prixa35amg.jpg", alt: "Mercedes A35 AMG" }
       ]
     },
     {

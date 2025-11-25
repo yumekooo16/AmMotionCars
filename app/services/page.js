@@ -17,7 +17,7 @@ export default function Services() {
         {/* Background: use next/image for better responsive handling */}
         <div className="absolute inset-0 w-full h-full">
           <Image
-            src="/image/servicesauditglc.jpg"
+            src="/image/Voitures de luxe sous ciel couvert.png"
             alt="Services AM Motion"
             fill
             className="object-cover object-center brightness-50"

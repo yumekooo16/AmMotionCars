@@ -16,7 +16,7 @@ export default function Page() {
         {/* Background image using Next/Image */}
         <div className="absolute inset-0">
           <Image
-            src="/image/rs6ammotion.jpg"
+            src="/image/ChatGPT Image 21 nov. 2025, 13_18_34.png"
             alt="RS6 AM Motion"
             fill
             className="object-cover object-center brightness-50"

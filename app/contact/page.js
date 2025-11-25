@@ -91,7 +91,7 @@ export default function Contact() {
       <section className="relative w-full h-screen overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/image/servicesauditglc.jpg"
+            src="/image/Gemini_Generated_Image_aqt37waqt37waqt3.png"
             alt="Contact AM Motion"
             fill
             className="object-cover object-center brightness-50"
