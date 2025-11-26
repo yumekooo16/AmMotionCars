@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-// 🚨 CORRECTION 1 : Importation unique de l'instance supabase initialisée
 import { supabase } from '@/lib/supabaseClient';
 
 export default function Contact() {
@@ -20,10 +19,7 @@ export default function Contact() {
   const [submitStatus, setSubmitStatus] = useState(null);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -32,47 +28,45 @@ export default function Contact() {
     setSubmitStatus(null);
 
     try {
-      // 1. Enregistrer dans Supabase
+      // 1️⃣ Enregistrement dans Supabase
       const { error: supabaseError } = await supabase
         .from('contacts')
-        .insert([
-          {
-            nom: formData.nom,
-            prenom: formData.prenom,
-            email: formData.email,
-            telephone: formData.telephone,
-            service: formData.service,
-            date: formData.date || null,
-            message: formData.message,
-            created_at: new Date().toISOString()
-          }
-        ]);
+        .insert([{
+          nom: formData.nom,
+          prenom: formData.prenom,
+          email: formData.email,
+          telephone: formData.telephone,
+          service: formData.service,
+          date: formData.date || null,
+          message: formData.message,
+          created_at: new Date().toISOString()
+        }]);
 
-      if (supabaseError) {
-        throw new Error('Erreur lors de l\'enregistrement Supabase');
-      }
+      if (supabaseError) throw new Error("Erreur lors de l'enregistrement Supabase");
 
-      // 2. Envoyer l'email via l'API Route
-      const emailResponse = await fetch('/api/send-email', {
+      // 2️⃣ Envoi de l'email via l'API sendContact
+      const emailResponse = await fetch('/api/sendContact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData), // Envoi de toutes les données du formulaire
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
       });
 
-      // 🚨 CORRECTION 2 & DEBUG : Gérer la réponse non-OK et lire le corps de l'erreur
       if (!emailResponse.ok) {
-        // Tente de lire le message d'erreur envoyé par le serveur
-        const errorData = await emailResponse.json().catch(() => ({ message: 'Erreur inconnue du serveur' }));
-        console.error("Détails de l'erreur API:", errorData);
-        
-        // Lance une erreur pour être capturée par le catch
-        throw new Error(`Erreur lors de l\'envoi de l\'email : ${errorData.message || emailResponse.statusText}`);
+        let errorMessage = 'Erreur inconnue du serveur';
+
+        // Lire la réponse une seule fois grâce à clone()
+        try {
+          const errorData = await emailResponse.clone().json();
+          if (errorData?.message) errorMessage = errorData.message;
+        } catch {
+          const text = await emailResponse.clone().text();
+          if (text) errorMessage = text;
+        }
+
+        throw new Error(errorMessage);
       }
 
       setSubmitStatus('success');
-      // Réinitialiser le formulaire
       setFormData({
         nom: "", prenom: "", email: "", telephone: "", service: "", date: "", message: ""
       });
@@ -119,7 +113,7 @@ export default function Contact() {
             <h2 className="text-3xl md:text-4xl font-light mb-12 tracking-wide">
               Envoyez-nous un message
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-6"> {/* Utilisation du tag <form> */}
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="nom" className="block text-sm font-light text-gray-400 mb-2">Nom</label>
@@ -206,48 +200,44 @@ export default function Contact() {
             </form>
           </div>
 
-          {/* Informations de contact (inchangé) */}
-        {/* Informations de contact */}
-<div>
-  <h2 className="text-3xl md:text-4xl font-light mb-12 tracking-wide">Nos coordonnées</h2>
-  <div className="space-y-10">
-    <div>
-      <h3 className="text-xl font-light text-gray-400 mb-2">Adresse</h3>
-      <p className="text-lg">58 Avenue de la Grande Armée, 75017 Paris</p>
-    </div>
-    
-    <div>
-      <h3 className="text-xl font-light text-gray-400 mb-2">WhatsApp</h3>
-      <p className="text-lg">
-        <a 
-          href="https://wa.me/33775775389" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="underline hover:text-gray-300 transition-colors"
-        >
-          Contacter via WhatsApp
-        </a>
-      </p>
-    </div>
-    
-    <div>
-      <h3 className="text-xl font-light text-gray-400 mb-2">Email</h3>
-      <p className="text-lg">
-        <a 
-          href="mailto:contact@ammotioncars.com"
-          className="underline hover:text-gray-300 transition-colors"
-        >
-          contact@ammotioncars.com
-        </a>
-      </p>
-    </div>
-  </div>
-</div>
+          {/* Informations de contact */}
+          <div>
+            <h2 className="text-3xl md:text-4xl font-light mb-12 tracking-wide">Nos coordonnées</h2>
+            <div className="space-y-10">
+              <div>
+                <h3 className="text-xl font-light text-gray-400 mb-2">Adresse</h3>
+                <p className="text-lg">58 Avenue de la Grande Armée, 75017 Paris</p>
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-light text-gray-400 mb-2">WhatsApp</h3>
+                <p className="text-lg">
+                  <a 
+                    href="https://wa.me/33775775389" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="underline hover:text-gray-300 transition-colors"
+                  >
+                    Contacter via WhatsApp
+                  </a>
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-light text-gray-400 mb-2">Email</h3>
+                <p className="text-lg">
+                  <a 
+                    href="mailto:contact@ammotioncars.com"
+                    className="underline hover:text-gray-300 transition-colors"
+                  >
+                    contact@ammotioncars.com
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-      
-      {/* Map et FAQ (inchangé) */}
-      {/* ... */}
     </div>
   );
 }

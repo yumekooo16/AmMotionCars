@@ -6,11 +6,10 @@ export async function POST(req) {
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    // Envoi de l'email
     const { error } = await resend.emails.send({
-      from: "contact@ammotioncars.com", // ton email d'envoi
-      to: "contact@ammotioncars.com",           // email de réception (agence)
-      subject: `Nouvelle réservation : ${data.vehicule || "Véhicule non spécifié"}`,
+      from: "contact@ammotioncars.com", // <-- ton email d'envoi
+      to: "contact@ammotioncars.com", // <-- ton email pour recevoir les contacts
+      subject: `Nouveau message : ${data.service || "Sans service"}`,
      html: `
       <div style="
         font-family: Arial, sans-serif;
@@ -23,20 +22,18 @@ export async function POST(req) {
         border-radius: 12px;
         border: 1px solid #5f6364;
       ">
-        <h2 style="text-align:center; color: #5f6364; margin-bottom:20px;">🚘 Nouvelle réservation AM Motion Cars</h2>
+        <h2 style="text-align:center; color: #5f6364; margin-bottom:20px;">📩 Nouvelle demande de contact AM Motion Cars</h2>
 
         <div style="padding: 15px; background: #222222; border-radius: 8px; margin-bottom: 15px;">
           <p><strong>Nom :</strong> ${data.nom} ${data.prenom}</p>
           <p><strong>Email :</strong> ${data.email}</p>
           <p><strong>Téléphone :</strong> ${data.telephone}</p>
-          <p><strong>Véhicule :</strong> ${data.vehicule || "Non spécifié"}</p>
-          <p><strong>Date de début :</strong> ${data.dateDebut}</p>
-          <p><strong>Date de fin :</strong> ${data.dateFin}</p>
-          <p><strong>Lieu de prise :</strong> ${data.lieuPrise || "Non précisé"}</p>
+          <p><strong>Service :</strong> ${data.service || "Non précisé"}</p>
+          <p><strong>Date souhaitée :</strong> ${data.date || "Non précisée"}</p>
         </div>
 
         <div style="padding: 15px; background: #333333; border-radius: 8px; margin-bottom: 15px;">
-          <p><strong>Message / demandes particulières :</strong></p>
+          <p><strong>Message :</strong></p>
           <p style="padding: 10px; background: #1a1a1a; border-radius: 5px;">${data.message}</p>
         </div>
 
@@ -45,17 +42,17 @@ export async function POST(req) {
         </p>
       </div>
       `,
+
     });
 
     if (error) {
-      console.error("Erreur Resend :", error);
-      return new Response(JSON.stringify({ message: "Erreur lors de l'envoi de l'email" }), { status: 500 });
+      console.error("Resend error:", error);
+      return Response.json({ message: "Erreur Envoi Email" }, { status: 500 });
     }
 
-    return new Response(JSON.stringify({ message: "Email envoyé avec succès !" }), { status: 200 });
-
+    return Response.json({ message: "Email envoyé !" }, { status: 200 });
   } catch (err) {
-    console.error("Erreur API sendReservation :", err);
-    return new Response(JSON.stringify({ message: "Erreur serveur" }), { status: 500 });
+    console.error("Erreur API:", err);
+    return Response.json({ message: "Erreur serveur" }, { status: 500 });
   }
 }

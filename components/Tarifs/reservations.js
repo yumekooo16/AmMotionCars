@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useMemo } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -18,7 +20,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
@@ -62,8 +64,8 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
 
       if (error) throw error;
 
-      // ✅ Étape 2 : envoi de l’email à l’agence
-      await fetch('/api/sendReservation', {
+      // ✅ Étape 2 : envoi de l’email via l’API
+      const response = await fetch('/api/sendReservation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -72,6 +74,11 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
         })
       });
 
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({ message: 'Erreur inconnue du serveur' }));
+        throw new Error(data.message || 'Erreur lors de l’envoi de l’email');
+      }
+
       // ✅ Étape 3 : affichage du message de succès
       setShowSuccess(true);
       resetForm();
@@ -79,6 +86,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
         setShowSuccess(false);
         onClose();
       }, 3000);
+
     } catch (error) {
       console.error('Erreur lors de la réservation :', error.message);
       setErrorMsg("Erreur lors de l'envoi de votre demande. Veuillez réessayer.");
@@ -114,9 +122,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
 
         {/* En-tête */}
         <div className="p-8 border-b border-white/20">
-          <h2 className="text-3xl font-bold text-white mb-2">
-            Demande de Réservation
-          </h2>
+          <h2 className="text-3xl font-bold text-white mb-2">Demande de Réservation</h2>
           {vehicule && (
             <div className="mt-4 bg-gray-900 p-4 rounded-lg border-l-4 border-[#5f6364]">
               <p className="text-sm text-gray-400 mb-1">Véhicule sélectionné</p>
@@ -141,12 +147,9 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
 
         {/* Formulaire */}
         <form onSubmit={handleSubmit} className="p-8">
-          {/* --- Tous tes champs restent inchangés --- */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
-              <label htmlFor="nom" className="block text-gray-400 font-semibold mb-2">
-                Nom *
-              </label>
+              <label htmlFor="nom" className="block text-gray-400 font-semibold mb-2">Nom *</label>
               <input
                 id="nom"
                 type="text"
@@ -159,9 +162,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
               />
             </div>
             <div>
-              <label htmlFor="prenom" className="block text-gray-400 font-semibold mb-2">
-                Prénom *
-              </label>
+              <label htmlFor="prenom" className="block text-gray-400 font-semibold mb-2">Prénom *</label>
               <input
                 id="prenom"
                 type="text"
@@ -175,11 +176,8 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
             </div>
           </div>
 
-          {/* Email */}
           <div className="mb-6">
-            <label htmlFor="email" className="block text-gray-400 font-semibold mb-2">
-              Email *
-            </label>
+            <label htmlFor="email" className="block text-gray-400 font-semibold mb-2">Email *</label>
             <input
               id="email"
               type="email"
@@ -192,11 +190,8 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
             />
           </div>
 
-          {/* Téléphone */}
           <div className="mb-6">
-            <label htmlFor="telephone" className="block text-gray-400 font-semibold mb-2">
-              Téléphone *
-            </label>
+            <label htmlFor="telephone" className="block text-gray-400 font-semibold mb-2">Téléphone *</label>
             <input
               id="telephone"
               type="tel"
@@ -209,12 +204,9 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
             />
           </div>
 
-          {/* Dates */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
-              <label htmlFor="dateDebut" className="block text-gray-400 font-semibold mb-2">
-                Date de début *
-              </label>
+              <label htmlFor="dateDebut" className="block text-gray-400 font-semibold mb-2">Date de début *</label>
               <input
                 id="dateDebut"
                 type="date"
@@ -227,9 +219,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
               />
             </div>
             <div>
-              <label htmlFor="dateFin" className="block text-gray-400 font-semibold mb-2">
-                Date de fin *
-              </label>
+              <label htmlFor="dateFin" className="block text-gray-400 font-semibold mb-2">Date de fin *</label>
               <input
                 id="dateFin"
                 type="date"
@@ -243,11 +233,8 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
             </div>
           </div>
 
-          {/* Lieu */}
           <div className="mb-6">
-            <label htmlFor="lieuPrise" className="block text-gray-400 font-semibold mb-2">
-              Lieu de prise en charge
-            </label>
+            <label htmlFor="lieuPrise" className="block text-gray-400 font-semibold mb-2">Lieu de prise en charge</label>
             <input
               id="lieuPrise"
               type="text"
@@ -259,11 +246,8 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
             />
           </div>
 
-          {/* Message */}
           <div className="mb-6">
-            <label htmlFor="message" className="block text-gray-400 font-semibold mb-2">
-              Message / Demandes particulières
-            </label>
+            <label htmlFor="message" className="block text-gray-400 font-semibold mb-2">Message / Demandes particulières</label>
             <textarea
               id="message"
               name="message"
@@ -275,7 +259,6 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
             />
           </div>
 
-          {/* Bouton */}
           <button
             type="submit"
             disabled={isSubmitting}
@@ -287,14 +270,8 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
 
         <style jsx>{`
           @keyframes slideIn {
-            from {
-              opacity: 0;
-              transform: translateY(-30px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
           }
         `}</style>
       </div>
