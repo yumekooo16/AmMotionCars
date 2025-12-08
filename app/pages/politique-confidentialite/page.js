@@ -91,7 +91,7 @@ export default function PolitiqueConfidentialite() {
             </h2>
             <div className="space-y-4 text-gray-400 font-light leading-relaxed" suppressHydrationWarning>
               <p>
-                <strong className="text-white">Base légale :</strong> Votre consentement explicite, recueilli via la case à cocher lors de la soumission du formulaire, et l'exécution du contrat de prestation de service.
+                <strong className="text-white">Base légale :</strong> Votre consentement explicite, recueilli via la case à cocher lors de la soumission du formulaire, et l&apos;exécution du contrat de prestation de service.
               </p>
               <p>
                 <strong className="text-white">Finalités :</strong>
@@ -140,7 +140,7 @@ export default function PolitiqueConfidentialite() {
               </p>
               <ul className="space-y-2 ml-6">
                 <li className="flex items-start"><span className="text-white mr-3">•</span><span>Chiffrement des données en transit (HTTPS)</span></li>
-                <li className="flex items-start"><span className="text-white mr-3">•</span><span>Authentification sécurisée pour l'accès aux bases de données</span></li>
+                <li className="flex items-start"><span className="text-white mr-3">•</span><span>Authentification sécurisée pour l&apos;accès aux bases de données</span></li>
                 <li className="flex items-start"><span className="text-white mr-3">•</span><span>Sauvegardes régulières</span></li>
                 <li className="flex items-start"><span className="text-white mr-3">•</span><span>Accès limité aux données selon le principe du moindre privilège</span></li>
               </ul>
@@ -159,7 +159,7 @@ export default function PolitiqueConfidentialite() {
               <ul className="space-y-3 ml-6">
                 <li className="flex items-start">
                   <span className="text-white mr-3">•</span>
-                  <span><strong className="text-white">Droit d'accès</strong> : obtenir une copie de vos données</span>
+                  <span><strong className="text-white">Droit d&apos;accès</strong> : obtenir une copie de vos données</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-white mr-3">•</span>
@@ -167,7 +167,7 @@ export default function PolitiqueConfidentialite() {
                 </li>
                 <li className="flex items-start">
                   <span className="text-white mr-3">•</span>
-                  <span><strong className="text-white">Droit à l'effacement</strong> : supprimer vos données (« droit à l'oubli »)</span>
+                  <span><strong className="text-white">Droit à l&apos;effacement</strong> : supprimer vos données (« droit à l&apos;oubli »)</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-white mr-3">•</span>
@@ -175,7 +175,7 @@ export default function PolitiqueConfidentialite() {
                 </li>
                 <li className="flex items-start">
                   <span className="text-white mr-3">•</span>
-                  <span><strong className="text-white">Droit d'opposition</strong> : vous opposer au traitement de vos données</span>
+                  <span><strong className="text-white">Droit d&apos;opposition</strong> : vous opposer au traitement de vos données</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-white mr-3">•</span>
@@ -191,7 +191,7 @@ export default function PolitiqueConfidentialite() {
                   <li><span className="text-white mr-3">•</span>Par courrier : 58-60 Avenue de la Grande Armée, 75017 Paris</li>
                 </ul>
                 <p className="mt-4 text-sm">
-                  Nous nous engageons à répondre à votre demande dans un délai maximum d'<span className="text-white">un mois</span>.
+                  Nous nous engageons à répondre à votre demande dans un délai maximum d&apos;<span className="text-white">un mois</span>.
                 </p>
               </div>
             </div>
@@ -215,7 +215,7 @@ export default function PolitiqueConfidentialite() {
             <h2 className="text-2xl font-light tracking-wide mb-6 text-white/90">8. Cookies</h2>
             <p className="text-gray-400 font-light leading-relaxed">
               Notre site utilise des cookies uniquement à des fins techniques (fonctionnement du site) et statistiques 
-              (analyse anonymisée de la fréquentation). Aucun cookie publicitaire ou de tracking n'est utilisé. 
+              (analyse anonymisée de la fréquentation). Aucun cookie publicitaire ou de tracking n&apos;est utilisé. 
               Vous pouvez configurer votre navigateur pour les refuser, mais certaines fonctionnalités pourraient être limitées.
             </p>
           </article>
@@ -238,8 +238,8 @@ export default function PolitiqueConfidentialite() {
               10. Réclamation auprès de la CNIL
             </h2>
             <p className="text-gray-400 font-light leading-relaxed">
-              Si vous estimez que vos droits ne sont pas respectés, vous avez le droit d'introduire une réclamation 
-              auprès de la Commission Nationale de l'Informatique et des Libertés (CNIL) :
+              Si vous estimez que vos droits ne sont pas respectés, vous avez le droit d&apos;introduire une réclamation 
+              auprès de la Commission Nationale de l&apos;Informatique et des Libertés (CNIL) :
             </p>
             <div className="mt-4 bg-neutral-950 border border-gray-800 p-6 rounded-lg" suppressHydrationWarning>
               <p className="text-white font-semibold mb-2">CNIL</p>

@@ -146,7 +146,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
         {/* Message de succès */}
         {showSuccess && (
           <div className="mx-8 mt-4 bg-green-600 text-white p-4 rounded-lg text-center font-semibold">
-            ✅ Votre demande a bien été enregistrée et transmise à l'agence !
+            ✅ Votre demande a bien été enregistrée et transmise à l&apos;agence !
           </div>
         )}
 
@@ -283,7 +283,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
                 className="mt-1 mr-3 w-5 h-5 accent-[#5f6364] cursor-pointer"
               />
               <span className="text-sm text-gray-300 leading-relaxed">
-                J'accepte que mes données personnelles soient collectées et traitées par Am Motion Cars 
+                J&apos;accepte que mes données personnelles soient collectées et traitées par Am Motion Cars 
                 pour traiter ma demande de réservation, conformément à la{' '}
                 <a 
                   href="/pages/politique-confidentialite" 

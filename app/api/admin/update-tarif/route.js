@@ -11,7 +11,7 @@ export async function POST(req) {
   try {
     const formData = await req.formData();
     
-    // Détecter si c'est un véhicule (a "nom" et "marque") ou un flyer (a "category")
+    // Détecter si cest un véhicule (a "nom" et "marque") ou un flyer (a "category")
     const nom = formData.get("nom");
     const marque = formData.get("marque");
     const category = formData.get("category");

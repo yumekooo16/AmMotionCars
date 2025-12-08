@@ -103,7 +103,7 @@ export default function Admin() {
             {/* Section info */}
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 text-white text-center">
               <p className="text-sm text-gray-300">
-                ✅ Vous êtes connecté en tant qu'administrateur
+                ✅ Vous êtes connecté en tant qu&apos;administrateur
               </p>
             </div>
           </div>
