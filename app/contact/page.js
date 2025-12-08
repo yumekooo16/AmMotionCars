@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { supabase } from '@/lib/supabaseClient';
+import { supabaseClient as supabase } from '@/lib/supabaseClient';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -85,7 +85,7 @@ export default function Contact() {
       <section className="relative w-full h-screen overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
           <Image
-            src="/image/Gemini_Generated_Image_aqt37waqt37waqt3.png"
+            src="/image/Voitures de luxe sous ciel couvert.webp"
             alt="Contact AM Motion"
             fill
             className="object-cover object-center brightness-50"

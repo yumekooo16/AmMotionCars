@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabaseClient as supabase } from '@/lib/supabaseClient';
 
 export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
   const [formData, setFormData] = useState({
@@ -12,7 +12,8 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
     dateDebut: '',
     dateFin: '',
     lieuPrise: '',
-    message: ''
+    message: '',
+    consentRgpd: false // ✅ Nouveau champ pour le consentement RGPD
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
@@ -20,9 +21,10 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e) => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: value
     }));
   };
 
@@ -37,17 +39,25 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
       dateDebut: '',
       dateFin: '',
       lieuPrise: '',
-      message: ''
+      message: '',
+      consentRgpd: false
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // ✅ Vérification du consentement RGPD
+    if (!formData.consentRgpd) {
+      setErrorMsg("Vous devez accepter la politique de confidentialité pour continuer.");
+      return;
+    }
+
     setIsSubmitting(true);
     setErrorMsg('');
 
     try {
-      // ✅ Étape 1 : insertion dans Supabase
+      // ✅ Étape 1 : insertion dans Supabase avec les champs RGPD
       const { error } = await supabase.from('reservations').insert([
         {
           nom: formData.nom,
@@ -58,13 +68,15 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
           date_fin: formData.dateFin,
           lieu_prise: formData.lieuPrise,
           message: formData.message,
-          vehicule: vehicule || 'Non spécifié'
+          vehicule: vehicule || 'Non spécifié',
+          consent_given: true,
+          consent_date: new Date().toISOString()
         }
       ]);
 
       if (error) throw error;
 
-      // ✅ Étape 2 : envoi de l’email via l’API
+      // ✅ Étape 2 : envoi de l'email via l'API
       const response = await fetch('/api/sendReservation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -76,7 +88,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
 
       if (!response.ok) {
         const data = await response.json().catch(() => ({ message: 'Erreur inconnue du serveur' }));
-        throw new Error(data.message || 'Erreur lors de l’envoi de l’email');
+        throw new Error(data.message || 'Erreur lors de l&apos;envoi de l&apos;email');
       }
 
       // ✅ Étape 3 : affichage du message de succès
@@ -134,11 +146,11 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
         {/* Message de succès */}
         {showSuccess && (
           <div className="mx-8 mt-4 bg-green-600 text-white p-4 rounded-lg text-center font-semibold">
-            ✅ Votre demande a bien été enregistrée et transmise à l’agence !
+            ✅ Votre demande a bien été enregistrée et transmise à l'agence !
           </div>
         )}
 
-        {/* Message d’erreur */}
+        {/* Message d'erreur */}
         {errorMsg && (
           <div className="mx-8 mt-4 bg-red-600 text-white p-4 rounded-lg text-center font-semibold">
             ⚠️ {errorMsg}
@@ -147,7 +159,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
 
         {/* Formulaire */}
         <form onSubmit={handleSubmit} className="p-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 overflow-x-hidden overscroll-behavior-x-none">
             <div>
               <label htmlFor="nom" className="block text-gray-400 font-semibold mb-2">Nom *</label>
               <input
@@ -257,6 +269,32 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
               className="w-full px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none resize-none"
               placeholder="GPS, siège bébé, assurance complémentaire..."
             />
+          </div>
+
+          {/* ✅ NOUVEAU : Case à cocher RGPD */}
+          <div className="mb-6 bg-gray-900 p-4 rounded-lg border border-gray-700">
+            <label className="flex items-start cursor-pointer">
+              <input
+                type="checkbox"
+                name="consentRgpd"
+                checked={formData.consentRgpd}
+                onChange={handleChange}
+                required
+                className="mt-1 mr-3 w-5 h-5 accent-[#5f6364] cursor-pointer"
+              />
+              <span className="text-sm text-gray-300 leading-relaxed">
+                J'accepte que mes données personnelles soient collectées et traitées par Am Motion Cars 
+                pour traiter ma demande de réservation, conformément à la{' '}
+                <a 
+                  href="/pages/politique-confidentialite" 
+                  target="_blank"
+                  className="text-[#5f6364] underline hover:text-[#7a7d7e] transition-colors"
+                >
+                  Politique de confidentialité
+                </a>
+                . *
+              </span>
+            </label>
           </div>
 
           <button

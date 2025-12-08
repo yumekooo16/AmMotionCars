@@ -30,3 +30,20 @@ body {
   overflow-x: hidden;
   overscroll-behavior-x: none;
 }
+
+select {
+  color: white;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+select option {
+  background: #111;
+  color: white;
+}
+
+/* Pour forcer les options en dark sur les navigateurs récalcitrants */
+select option:checked,
+select option:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+

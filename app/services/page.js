@@ -13,11 +13,11 @@ export default function Services() {
   return (
     <>
       {/* Section Hero */}
-      <section className=" w-full h-screen overflow-hidden">
+      <section className=" w-full h-screen overflow-hidden" suppressHydrationWarning>
         {/* Background: use next/image for better responsive handling */}
-        <div className="absolute inset-0 w-full h-full">
+        <div className="absolute inset-0 w-full h-full" suppressHydrationWarning>
           <Image
-            src="/image/Voitures de luxe sous ciel couvert.png"
+            src="/image/Voitures de luxe sous ciel couvert.webp"
             alt="Services AM Motion"
             fill
             className="object-cover object-center brightness-50"
@@ -26,8 +26,8 @@ export default function Services() {
           />
         </div>
 
-        <div className="relative z-10 h-full flex items-center justify-center px-4 md:px-8 lg:px-16">
-          <div className="text-center text-white max-w-3xl">
+        <div className="relative z-10 h-full flex items-center justify-center px-4 md:px-8 lg:px-16" suppressHydrationWarning>
+          <div className="text-center text-white max-w-3xl" suppressHydrationWarning>
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-wide mb-4">
               Nos Services
             </h1>

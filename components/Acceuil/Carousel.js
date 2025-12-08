@@ -1,13 +1,15 @@
+'use client';
+
 import React, { useState } from "react";
 import Link from "next/link";
 
 const slides = [
-  { href: "/tarifs#mercedes", src: "/image/prixclassg63amg.jpg", alt: "Mercedes G63 AMG" },
-  { href: "/tarifs#mercedes", src: "/image/prixamggt.jpg", alt: "Mercedes AMG GT" },
-  { href: "/tarifs#porsche", src: "/image/prixporshe911.jpg", alt: "Porsche 911" },
-  { href: "/tarifs#porsche", src: "/image/prixporshecayennes.jpg", alt: "Porsche Cayenne" },
-  { href: "/tarifs#bmw", src: "/image/prixm2compet.jpg", alt: "BMW M2 Competition" },
-  { href: "/tarifs#audi", src: "/image/prixrs6perf.jpg", alt: "Audi RS6" },
+  { href: "/tarifs#mercedes", src: "/image/prixclassg63amg.webp", alt: "Mercedes G63 AMG" },
+  { href: "/tarifs#mercedes", src: "/image/prixamggt.webp", alt: "Mercedes AMG GT" },
+  { href: "/tarifs#porsche", src: "/image/prixporshe911.webp", alt: "Porsche 911" },
+  { href: "/tarifs#porsche", src: "/image/prixporshecayennes.webp", alt: "Porsche Cayenne" },
+  { href: "/tarifs#bmw", src: "/image/prixm2compet.webp", alt: "BMW M2 Competition" },
+  { href: "/tarifs#audi", src: "/image/prixrs6perf.webp", alt: "Audi RS6" },
 ];
 
 export default function Carousel() {
@@ -17,8 +19,8 @@ export default function Carousel() {
   const prevSlide = () => setCurrent((current - 1 + slides.length) % slides.length);
 
   return (
-    <div className="w-full flex flex-col items-center py-5">
-      <div className="relative w-80 h-100 rounded-2xl overflow-hidden shadow-lg rounded-2xl shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto mb-6 object-cover">
+    <div className="w-full flex flex-col items-center py-5" suppressHydrationWarning>
+      <div className="relative w-80 h-100 rounded-2xl overflow-hidden shadow-lg rounded-2xl shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto mb-6 object-cover" suppressHydrationWarning>
         <Link href={slides[current].href}>
           <img
             src={slides[current].src}

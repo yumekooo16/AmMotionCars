@@ -1,11 +1,20 @@
+'use client';
+
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 
 export default function VIP() {
   const sectionRef = useRef(null);
   const [visible, setVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     const handleScroll = () => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
@@ -16,17 +25,18 @@ export default function VIP() {
     window.addEventListener("scroll", handleScroll);
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isMounted]);
 
   return (
     <section
       ref={sectionRef}
+      suppressHydrationWarning
       className={`w-full flex flex-col items-center py-12 md:py-16 px-4 md:px-6 transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
     >
       <div className="w-full flex justify-center mb-6">
         <Image
-          src="/image/vipevenement.jpg"
-          alt="VIP Service"
+          src="/image/vipevenement.webp"
+          alt="audi avec un glc pour decrire les service VIP"
           width={800}
           height={600}
           className="w-full max-w-md md:max-w-lg rounded-2xl shadow-lg object-cover"

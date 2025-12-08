@@ -1,16 +1,18 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 
 export default function Footer() {
   return (
     <footer className="bg-black text-white">
-      <div className="border-t border-gray-800 mb-12 pt-8 text-center text-gray-500 text-sm"/>
+      <div className="border-t border-gray-800 mb-12 pt-8 text-center text-gray-500 text-sm" suppressHydrationWarning />
 
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
+      <div className="max-w-6xl mx-auto px-6" suppressHydrationWarning>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left" suppressHydrationWarning>
           
           {/* Logo et Plan du site */}
-          <div>
+          <div suppressHydrationWarning>
             <h3 className="text-3xl font-bold mb-5">Am Motion Cars</h3>
             
             <h4 className="text-lg font-semibold mb-4">Plan du site</h4>
@@ -23,7 +25,7 @@ export default function Footer() {
           </div>
 
           {/* Services */}
-          <div>
+          <div suppressHydrationWarning>
             <h4 className="text-lg font-semibold mb-4">Services</h4>
             <ul className="space-y-2 text-gray-400">
               <li><Link href="/services" className="hover:text-yellow-400 transition">Transfert Aéroport</Link></li>
@@ -36,7 +38,7 @@ export default function Footer() {
           </div>
 
           {/* Pages légales et Réseaux sociaux */}
-          <div>
+          <div suppressHydrationWarning>
             <h4 className="text-lg font-semibold mb-4">Pages légales</h4>
             <ul className="space-y-2 text-gray-400">
               <li>
@@ -49,10 +51,15 @@ export default function Footer() {
                   Politique de confidentialité
                 </Link>
               </li>
+              <li>
+                <Link href="/pages/CGU" className="hover:text-yellow-400 transition">
+                 CGU
+                </Link>
+              </li>
             </ul>
 
             <h4 className="text-lg font-semibold mb-4 mt-8">Nos réseaux</h4>
-            <div className="flex gap-4 justify-center md:justify-start">
+            <div className="flex gap-4 justify-center md:justify-start" suppressHydrationWarning>
               <a 
                 href="https://www.instagram.com/ammotioncars" 
                 target="_blank" 
@@ -83,7 +90,7 @@ export default function Footer() {
         </div>
 
         {/* Ligne de séparation */}
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm">
+        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm" suppressHydrationWarning>
           <p>Réalisé par <span className="text-white font-semibold">Wyatt</span> - Développeur web freelance</p>
           <p className="mt-2">© 2025 Am Motion Cars. Tous droits réservés.</p>
         </div>

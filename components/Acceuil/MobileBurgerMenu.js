@@ -87,6 +87,7 @@ function Drawer({ open, setOpen, children }) {
       onClick={handleOverlayClick}
       tabIndex={-1}
       aria-hidden={!open}
+      suppressHydrationWarning
     >
       <aside
         id="mobile-drawer"
@@ -97,6 +98,7 @@ function Drawer({ open, setOpen, children }) {
         className={`fixed top-0 left-0 h-full w-4/5 max-w-xs bg-black shadow-xl z-30 flex flex-col pt-16 
           transition-transform duration-300 ease-in-out
           ${open ? "translate-x-0" : "-translate-x-full"}`}
+        suppressHydrationWarning
       >
         {children}
       </aside>

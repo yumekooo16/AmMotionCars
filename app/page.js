@@ -12,12 +12,12 @@ export default function Page() {
   return (
     <>
       {/* Section Hero */}
-      <section className="relative w-full h-screen overflow-hidden">
+      <section className="relative w-full h-screen overflow-hidden" suppressHydrationWarning>
         {/* Background image using Next/Image */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0" suppressHydrationWarning>
           <Image
-            src="/image/ChatGPT Image 21 nov. 2025, 13_18_34.png"
-            alt="RS6 AM Motion"
+            src="/image/ChatGPT Image 21 nov. 2025, 13_18_34.webp"
+            alt="RS6 AM Motion fond"
             fill
             className="object-cover object-center brightness-50"
             priority
@@ -42,16 +42,16 @@ export default function Page() {
       </section>
 
       {/* Section Partenaire de Confiance */}
-      <section className="relative w-full bg-black text-white flex flex-col justify-center items-center py-10 px-4 md:px-8">
-        <div className="max-w-4xl text-center">
+      <section className="relative w-full bg-black text-white flex flex-col justify-center items-center py-10 px-4 md:px-8" suppressHydrationWarning>
+        <div className="max-w-4xl text-center" suppressHydrationWarning>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-wide mb-12">
             Votre partenaire <span className="text-[#5f6364]">automobile</span>
             <br />
             de confiance.
           </h2>
 
-          <div className="space-y-6 max-w-2xl mx-auto">
-            <div className="flex items-start gap-4">
+          <div className="space-y-6 max-w-2xl mx-auto" suppressHydrationWarning>
+            <div className="flex items-start gap-4" suppressHydrationWarning>
               <svg className="w-8 h-8 text-blue-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
@@ -60,7 +60,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4" suppressHydrationWarning>
               <svg className="w-8 h-8 text-blue-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
@@ -69,7 +69,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4" suppressHydrationWarning>
               <svg className="w-8 h-8 text-blue-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
@@ -87,8 +87,8 @@ export default function Page() {
       <FlottePrestige />
       <Carousel />
 
-      <section className="relative w-full bg-gradient-to-b from-black via-gray-900 to-black text-white py-20 px-6">
-        <div className="max-w-4xl mx-auto">
+      <section className="relative w-full bg-gradient-to-b from-black via-gray-900 to-black text-white py-20 px-6" suppressHydrationWarning>
+        <div className="max-w-4xl mx-auto" suppressHydrationWarning>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-wide text-center mb-4">
             Questions <span className="text-white">Fréquentes</span>
           </h2>
@@ -96,7 +96,7 @@ export default function Page() {
             Tout ce que vous devez savoir sur nos services
           </p>
 
-          <div className="space-y-6">
+          <div className="space-y-6" suppressHydrationWarning>
             <FAQItem 
               question="Quels types de services propose AM Motion Cars ?"
               answer="
@@ -133,7 +133,7 @@ Les demandes urgentes sont possibles selon disponibilité."
             />
           </div>
 
-          <div className="text-center mt-16">
+          <div className="text-center mt-16" suppressHydrationWarning>
             <p className="text-gray-400 mb-6">Vous avez une autre question ?</p>
             <Link href="/contact">
             <button className="bg-white -400  -500 text-gray-900 font-semibold rounded-xl px-8 py-4 text-lg transition mb-0">
@@ -153,7 +153,7 @@ function FAQItem({ question, answer }) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-  <div className="mb-0 border border-gray-800 rounded-lg overflow-hidden bg-black bg-opacity-50 backdrop-blur-sm transition-all hover:border-white">
+  <div className="mb-0 border border-gray-800 rounded-lg overflow-hidden bg-black bg-opacity-50 backdrop-blur-sm transition-all hover:border-white" suppressHydrationWarning>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-4 md:p-6 text-left transition-colors hover:bg-gray-700 hover:bg-opacity-30"
@@ -175,8 +175,9 @@ function FAQItem({ question, answer }) {
         className={`overflow-hidden transition-all duration-300 ${
           isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
+        suppressHydrationWarning
       >
-        <div className="p-4 md:p-6 pt-0 text-gray-300 leading-relaxed text-sm md:text-base">
+        <div className="p-4 md:p-6 pt-0 text-gray-300 leading-relaxed text-sm md:text-base" suppressHydrationWarning>
           {answer}
         </div>
       </div>

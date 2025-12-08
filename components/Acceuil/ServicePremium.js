@@ -1,10 +1,19 @@
+'use client';
+
 import React, { useRef, useEffect, useState } from "react";
 
 export default function ServicePremium() {
   const sectionRef = useRef(null);
   const [visible, setVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     const handleScroll = () => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
@@ -15,19 +24,20 @@ export default function ServicePremium() {
     window.addEventListener("scroll", handleScroll);
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isMounted]);
 
   return (
     <section
       ref={sectionRef}
+      suppressHydrationWarning
       className={`w-full flex flex-col items-center py-12 px-4 md:py-16 md:px-8 transition-all duration-700 ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       }`}
     >
       {/* Image responsive */}
       <img
-        src="./image/glcammotion.jpg"
-        alt="Service Premium"
+        src="./image/glcammotion.webp"
+        alt="Mercedes glc pour decrire les Service Premium"
         className="rounded-2xl shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto mb-6 object-cover"
       />
 

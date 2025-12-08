@@ -11,7 +11,7 @@ export default function MentionsLegales() {
       <section className="relative w-full h-[60vh] overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/image/servicesauditglc.jpg"
+            src="/image/ChatGPT Image 21 nov. 2025, 13_18_34.webp"
             alt="Mentions légales AM Motion"
             fill
             className="object-cover object-center brightness-[0.35]"
