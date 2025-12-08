@@ -1,19 +1,20 @@
 import { createClient } from "@supabase/supabase-js";
-import jwt from "jsonwebtoken"; // pour décoder le JWT utilisateur
+import jwt from "jsonwebtoken";
 
 export const runtime = "nodejs";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const supabaseJwtSecret = process.env.SUPABASE_JWT_SECRET; // secret pour décoder le JWT utilisateur
-
-if (!supabaseUrl || !supabaseKey || !supabaseJwtSecret) {
-  throw new Error("Supabase URL, Service Role Key ou JWT secret non défini !");
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 export async function POST(req) {
+  // 0️⃣ Lire les variables d'environnement à l'exécution
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseJwtSecret = process.env.SUPABASE_JWT_SECRET;
+
+  if (!supabaseUrl || !supabaseKey || !supabaseJwtSecret) {
+    throw new Error("Supabase URL, Service Role Key ou JWT secret non défini !");
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
   try {
     // 1️⃣ Vérification JWT admin
     const authHeader = req.headers.get("authorization");
@@ -38,8 +39,6 @@ export async function POST(req) {
     const marque = formData.get("marque");
     const nom = formData.get("nom");
     const file = formData.get("image");
-
-    console.log("Form Data:", { marque, nom, file });
 
     if (!marque || !nom || !file) {
       return Response.json({ success: false, error: "Données manquantes" }, { status: 400 });
