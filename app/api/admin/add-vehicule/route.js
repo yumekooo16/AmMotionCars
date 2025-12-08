@@ -1,18 +1,39 @@
 import { createClient } from "@supabase/supabase-js";
+import jwt from "jsonwebtoken"; // pour décoder le JWT utilisateur
 
 export const runtime = "nodejs";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseJwtSecret = process.env.SUPABASE_JWT_SECRET; // secret pour décoder le JWT utilisateur
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error("Supabase URL ou Service Role Key non définie !");
+if (!supabaseUrl || !supabaseKey || !supabaseJwtSecret) {
+  throw new Error("Supabase URL, Service Role Key ou JWT secret non défini !");
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function POST(req) {
   try {
+    // 1️⃣ Vérification JWT admin
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return Response.json({ success: false, error: "Token manquant" }, { status: 401 });
+    }
+
+    const token = authHeader.split(" ")[1];
+    let payload;
+    try {
+      payload = jwt.verify(token, supabaseJwtSecret);
+    } catch (err) {
+      return Response.json({ success: false, error: "Token invalide" }, { status: 401 });
+    }
+
+    if (payload?.role !== "admin") {
+      return Response.json({ success: false, error: "Accès refusé" }, { status: 403 });
+    }
+
+    // 2️⃣ Récupération des données
     const formData = await req.formData();
     const marque = formData.get("marque");
     const nom = formData.get("nom");
@@ -24,15 +45,14 @@ export async function POST(req) {
       return Response.json({ success: false, error: "Données manquantes" }, { status: 400 });
     }
 
+    // 3️⃣ Préparer le fichier
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-
-    // Sécuriser le nom du fichier
     const safeMarque = encodeURIComponent(marque.toLowerCase().replace(/\s/g, "_"));
     const safeFileName = file.name.replace(/\s/g, "_");
     const filename = `${safeMarque}/${Date.now()}-${safeFileName}`;
 
-    // Upload image
+    // 4️⃣ Upload via SERVICE_ROLE (ignore RLS)
     const { error: uploadError } = await supabase.storage
       .from("tarifs-images")
       .upload(filename, buffer, {
@@ -45,7 +65,7 @@ export async function POST(req) {
       throw uploadError;
     }
 
-    // Récupérer URL publique
+    // 5️⃣ Récupérer URL publique
     const { data: publicUrlData, error: urlError } = supabase.storage
       .from("tarifs-images")
       .getPublicUrl(filename);
@@ -55,7 +75,7 @@ export async function POST(req) {
       throw new Error("Impossible de récupérer l'URL publique");
     }
 
-    // Insertion dans la table
+    // 6️⃣ Insertion dans la table
     const { data: vehiculeData, error: dbError } = await supabase
       .from("vehicules")
       .insert({
