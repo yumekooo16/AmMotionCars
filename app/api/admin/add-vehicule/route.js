@@ -2,10 +2,14 @@ import { createClient } from "@supabase/supabase-js";
 
 export const runtime = "nodejs";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("Supabase URL ou Service Role Key non définie !");
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function POST(req) {
   try {
@@ -14,16 +18,19 @@ export async function POST(req) {
     const nom = formData.get("nom");
     const file = formData.get("image");
 
+    console.log("Form Data:", { marque, nom, file });
+
     if (!marque || !nom || !file) {
-      return Response.json({ 
-        success: false, 
-        error: "Données manquantes" 
-      }, { status: 400 });
+      return Response.json({ success: false, error: "Données manquantes" }, { status: 400 });
     }
 
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    const filename = `${marque}/${Date.now()}-${file.name}`;
+
+    // Sécuriser le nom du fichier
+    const safeMarque = encodeURIComponent(marque.toLowerCase().replace(/\s/g, "_"));
+    const safeFileName = file.name.replace(/\s/g, "_");
+    const filename = `${safeMarque}/${Date.now()}-${safeFileName}`;
 
     // Upload image
     const { error: uploadError } = await supabase.storage
@@ -33,35 +40,40 @@ export async function POST(req) {
         upsert: false,
       });
 
-    if (uploadError) throw uploadError;
+    if (uploadError) {
+      console.error("Erreur upload:", uploadError);
+      throw uploadError;
+    }
 
     // Récupérer URL publique
-    const { data: publicUrlData } = supabase.storage
+    const { data: publicUrlData, error: urlError } = supabase.storage
       .from("tarifs-images")
       .getPublicUrl(filename);
+
+    if (urlError || !publicUrlData?.publicUrl) {
+      console.error("Erreur public URL:", urlError, publicUrlData);
+      throw new Error("Impossible de récupérer l'URL publique");
+    }
 
     // Insertion dans la table
     const { data: vehiculeData, error: dbError } = await supabase
       .from("vehicules")
       .insert({
         marque: marque.toLowerCase(),
-        nom: nom,
-        image_url: publicUrlData.publicUrl
+        nom,
+        image_url: publicUrlData.publicUrl,
       })
       .select();
 
-    if (dbError) throw dbError;
+    if (dbError) {
+      console.error("Erreur DB:", dbError);
+      throw dbError;
+    }
 
-    return Response.json({ 
-      success: true, 
-      vehicule: vehiculeData[0]
-    });
+    return Response.json({ success: true, vehicule: vehiculeData[0] });
 
   } catch (err) {
-    console.error("Erreur:", err);
-    return Response.json({ 
-      success: false, 
-      error: err.message 
-    }, { status: 500 });
+    console.error("Erreur catch:", err);
+    return Response.json({ success: false, error: err.message }, { status: 500 });
   }
 }
