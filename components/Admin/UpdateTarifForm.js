@@ -36,7 +36,7 @@ export default function ManageVehiculesForm() {
         setVehicules(data.vehicules);
       }
     } catch (err) {
-      console.error("Erreur chargement véhicules:", err);
+      // Erreur silencieuse en production
     } finally {
       setLoadingVehicules(false);
     }
@@ -101,7 +101,6 @@ export default function ManageVehiculesForm() {
       }
     } catch (err) {
       setMessage("❌ Erreur réseau. Réessayez.");
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -130,27 +129,26 @@ export default function ManageVehiculesForm() {
       }
     } catch (err) {
       setMessage("❌ Erreur réseau");
-      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-4xl w-full text-white mx-auto">
-      <h2 className="text-2xl font-semibold mb-6 text-center">Gérer les Véhicules</h2>
+    <div className="bg-white/10 backdrop-blur-lg rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 max-w-4xl w-full text-white mx-auto">
+      <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center">Gérer les Véhicules</h2>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         {/* Formulaire d'ajout */}
         <div className="flex flex-col gap-4">
-          <h3 className="text-xl font-semibold mb-2">Ajouter un véhicule</h3>
+          <h3 className="text-lg sm:text-xl font-semibold mb-2">Ajouter un véhicule</h3>
           
           <div>
-            <label className="block mb-2 font-medium">Marque</label>
+            <label className="block mb-2 text-sm sm:text-base font-medium">Marque</label>
             <select
               value={marque}
               onChange={e => setMarque(e.target.value)}
-              className="w-full p-3 rounded-xl bg-white/20 text-white border border-white/30 focus:border-yellow-400 outline-none transition"
+              className="w-full p-3 rounded-lg sm:rounded-xl bg-white/20 text-white border border-white/30 focus:border-yellow-400 outline-none transition"
             >
               {MARQUES.map(m => (
                 <option key={m.id} value={m.id} className="bg-gray-800">
@@ -161,37 +159,37 @@ export default function ManageVehiculesForm() {
           </div>
 
           <div>
-            <label className="block mb-2 font-medium">Nom du véhicule</label>
+            <label className="block mb-2 text-sm sm:text-base font-medium">Nom du véhicule</label>
             <input
               type="text"
               value={nom}
               onChange={e => setNom(e.target.value)}
               placeholder="Ex: Mercedes AMG GTC"
-              className="w-full p-3 rounded-xl bg-white/20 text-white placeholder-white/50 border border-white/30 focus:border-yellow-400 outline-none transition"
+              className="w-full p-3 rounded-lg sm:rounded-xl bg-white/20 text-white placeholder-white/50 border border-white/30 focus:border-yellow-400 outline-none transition"
             />
           </div>
 
           <div>
-            <label className="block mb-2 font-medium">Photo du véhicule</label>
+            <label className="block mb-2 text-sm sm:text-base font-medium">Photo du véhicule</label>
             <input
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="block w-full text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-yellow-400 file:text-black file:font-semibold hover:file:bg-yellow-500 file:cursor-pointer"
+              className="block w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-yellow-400 file:text-black file:text-sm file:font-semibold hover:file:bg-yellow-500 file:cursor-pointer"
             />
             <p className="text-xs text-white/60 mt-1">Max 5MB</p>
           </div>
 
           {preview && (
-            <div className="relative rounded-xl overflow-hidden border-2 border-yellow-400">
-              <img src={preview} alt="Preview" className="w-full h-48 object-cover" />
+            <div className="relative rounded-lg sm:rounded-xl overflow-hidden border-2 border-yellow-400">
+              <img src={preview} alt="Preview" className="w-full h-40 sm:h-48 object-cover" />
             </div>
           )}
 
           <button
             onClick={handleSubmit}
             disabled={loading || !image || !nom.trim()}
-            className={`py-3 px-6 rounded-xl w-full font-semibold transition ${
+            className={`py-3 px-6 rounded-lg sm:rounded-xl w-full text-sm sm:text-base font-semibold transition ${
               loading || !image || !nom.trim()
                 ? "bg-gray-500 cursor-not-allowed opacity-50" 
                 : "bg-yellow-400 hover:bg-yellow-500 text-black"
@@ -203,14 +201,14 @@ export default function ManageVehiculesForm() {
 
         {/* Liste des véhicules */}
         <div>
-          <h3 className="text-xl font-semibold mb-4">Véhicules existants</h3>
+          <h3 className="text-lg sm:text-xl font-semibold mb-4">Véhicules existants</h3>
           
           {loadingVehicules ? (
-            <p className="text-center text-white/60">Chargement...</p>
+            <p className="text-center text-white/60 text-sm">Chargement...</p>
           ) : (
-            <div className="space-y-2 max-h-[600px] overflow-y-auto pr-2">
+            <div className="space-y-2 max-h-[400px] sm:max-h-[600px] overflow-y-auto pr-2">
               {vehicules.length === 0 ? (
-                <p className="text-center text-white/60">Aucun véhicule</p>
+                <p className="text-center text-white/60 text-sm">Aucun véhicule</p>
               ) : (
                 vehicules.map(v => (
                   <div
@@ -220,16 +218,16 @@ export default function ManageVehiculesForm() {
                     <img
                       src={v.image_url}
                       alt={v.nom}
-                      className="w-16 h-16 object-cover rounded-lg"
+                      className="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded-lg flex-shrink-0"
                     />
-                    <div className="flex-1">
-                      <p className="font-medium">{v.nom}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm sm:text-base truncate">{v.nom}</p>
                       <p className="text-xs text-white/60 capitalize">{v.marque}</p>
                     </div>
                     <button
                       onClick={() => handleDelete(v.id, v.nom)}
                       disabled={loading}
-                      className="px-1 py-1 bg-red-500 hover:bg-red-600 rounded-lg text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 py-1.5 bg-red-500 hover:bg-red-600 rounded-lg text-xs sm:text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap flex-shrink-0"
                     >
                       Supprimer
                     </button>
@@ -243,7 +241,7 @@ export default function ManageVehiculesForm() {
 
       {/* Message */}
       {message && (
-        <div className={`mt-6 p-3 rounded-xl font-medium text-center ${
+        <div className={`mt-4 sm:mt-6 p-3 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium text-center ${
           message.startsWith("✅") 
             ? "bg-green-500/20 text-green-300 border border-green-500/50" 
             : "bg-red-500/20 text-red-300 border border-red-500/50"

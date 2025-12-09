@@ -169,7 +169,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
                 value={formData.nom}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
+                className="w-80 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
                 placeholder="Votre nom"
               />
             </div>
@@ -182,7 +182,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
                 value={formData.prenom}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
+                className="w-80 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
                 placeholder="Votre prénom"
               />
             </div>
@@ -197,7 +197,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
+              className="w-80 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
               placeholder="votre.email@exemple.com"
             />
           </div>
@@ -211,7 +211,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
               value={formData.telephone}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
+              className="w-80 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
               placeholder="06 12 34 56 78"
             />
           </div>
@@ -227,7 +227,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
                 onChange={handleChange}
                 min={today}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
+                className="w-80 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
               />
             </div>
             <div>
@@ -240,7 +240,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
                 onChange={handleChange}
                 min={minDateFin}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
+                className="w-80 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
               />
             </div>
           </div>
@@ -253,7 +253,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
               name="lieuPrise"
               value={formData.lieuPrise}
               onChange={handleChange}
-              className="w-full px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
+              className="w-80 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
               placeholder="Aéroport, adresse..."
             />
           </div>
@@ -266,7 +266,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
               value={formData.message}
               onChange={handleChange}
               rows="4"
-              className="w-full px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none resize-none"
+              className="w-80 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none resize-none"
               placeholder="GPS, siège bébé, assurance complémentaire..."
             />
           </div>
