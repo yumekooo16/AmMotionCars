@@ -169,7 +169,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
                 value={formData.nom}
                 onChange={handleChange}
                 required
-                className="w-80 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
+                className="w-75 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
                 placeholder="Votre nom"
               />
             </div>
@@ -182,7 +182,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
                 value={formData.prenom}
                 onChange={handleChange}
                 required
-                className="w-80 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
+                className="w-75 px-4 py-3 border-2 border-gray-700 bg-gray-800 text-white rounded-lg focus:border-[#5f6364] focus:outline-none"
                 placeholder="Votre prénom"
               />
             </div>
