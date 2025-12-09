@@ -2,11 +2,6 @@ import { createClient } from "@supabase/supabase-js";
 
 export const runtime = "nodejs";
 
-// Ajoutez ces logs
-console.log("🔍 SUPABASE_URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
-console.log("🔍 SERVICE_KEY exists:", !!process.env.SUPABASE_SERVICE_ROLE_KEY);
-console.log("🔍 SERVICE_KEY length:", process.env.SUPABASE_SERVICE_ROLE_KEY?.length);
-
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -25,8 +20,6 @@ export async function POST(req) {
     const nom = formData.get("nom");
     const file = formData.get("image");
 
-    console.log("📝 Données reçues:", { marque, nom, fileName: file?.name });
-
     if (!marque || !nom || !file) {
       return Response.json({ 
         success: false, 
@@ -38,9 +31,6 @@ export async function POST(req) {
     const buffer = Buffer.from(arrayBuffer);
     const filename = `${marque}/${Date.now()}-${file.name}`;
 
-    console.log("📤 Upload vers:", filename);
-
-    // Upload image
     const { error: uploadError } = await supabase.storage
       .from("tarifs-images")
       .upload(filename, buffer, {
@@ -48,21 +38,12 @@ export async function POST(req) {
         upsert: false,
       });
 
-    if (uploadError) {
-      console.error("❌ Erreur upload:", uploadError);
-      throw uploadError;
-    }
+    if (uploadError) throw uploadError;
 
-    console.log("✅ Upload réussi");
-
-    // Récupérer URL publique
     const { data: publicUrlData } = supabase.storage
       .from("tarifs-images")
       .getPublicUrl(filename);
 
-    console.log("🔗 URL publique:", publicUrlData.publicUrl);
-
-    // Insertion dans la table
     const { data: vehiculeData, error: dbError } = await supabase
       .from("vehicules")
       .insert({
@@ -72,12 +53,7 @@ export async function POST(req) {
       })
       .select();
 
-    if (dbError) {
-      console.error("❌ Erreur DB:", dbError);
-      throw dbError;
-    }
-
-    console.log("✅ Véhicule inséré:", vehiculeData[0]);
+    if (dbError) throw dbError;
 
     return Response.json({ 
       success: true, 
@@ -85,7 +61,6 @@ export async function POST(req) {
     });
 
   } catch (err) {
-    console.error("💥 Erreur globale:", err);
     return Response.json({ 
       success: false, 
       error: err.message 

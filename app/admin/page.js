@@ -12,7 +12,6 @@ export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
-  // Vérifier si l'admin est déjà connecté au chargement
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -21,7 +20,6 @@ export default function Admin() {
           setIsAuthenticated(true);
         }
       } catch (err) {
-        // Non authentifié
         setIsAuthenticated(false);
       }
     };
@@ -32,7 +30,6 @@ export default function Admin() {
     e.preventDefault();
     setError("");
 
-    // Supprime les espaces avant et après
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
 
@@ -41,7 +38,7 @@ export default function Admin() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: trimmedEmail, password: trimmedPassword }),
-        credentials: "include", // Envoie les cookies
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -59,7 +56,6 @@ export default function Admin() {
     }
   };
 
-  // Gestionnaire de déconnexion
   const handleLogout = async () => {
     try {
       await fetch("/api/admin/logout", { method: "POST", credentials: "include" });
@@ -70,10 +66,11 @@ export default function Admin() {
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden" suppressHydrationWarning>
-      <div className="absolute inset-0" suppressHydrationWarning>
+    <section className="relative w-full min-h-screen overflow-x-hidden" suppressHydrationWarning>
+      {/* Background Image */}
+      <div className="fixed inset-0 -z-10" suppressHydrationWarning>
         <Image
-          src="/image/interieur g43.png"
+          src="/image/interieur g43.webp"
           alt="Intérieur véhicule"
           fill
           className="object-cover object-center brightness-50"
@@ -82,57 +79,77 @@ export default function Admin() {
         />
       </div>
 
-      <div className="relative z-10 h-full flex items-center justify-center px-4 md:px-8 lg:px-16" suppressHydrationWarning>
+      {/* Content Container */}
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-4 py-8 sm:py-12" suppressHydrationWarning>
         {isAuthenticated ? (
-          <div className="flex flex-col gap-6 w-full max-w-2xl">
-            {/* Bouton de déconnexion */}
-            <div className="flex justify-end">
+          <div className="w-full max-w-4xl space-y-4 sm:space-y-6">
+            {/* Header avec bouton déconnexion */}
+            <div className="mt-10 flex items-center justify-between bg-white/10 backdrop-blur-lg rounded-xl sm:rounded-2xl p-4 sm:p-6">
+              <div className="text-white">
+                <h1 className="text-xl sm:text-2xl font-semibold">Dashboard Admin</h1>
+                <p className="text-xs sm:text-sm text-gray-300 mt-1">✅ Connecté</p>
+              </div>
               <button
                 onClick={handleLogout}
-                className="mt-15   px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition"
+                className="px-4 py-2 sm:px-6 sm:py-2.5 bg-red-500 hover:bg-red-600 text-white text-sm sm:text-base font-semibold rounded-lg sm:rounded-xl transition-colors whitespace-nowrap"
               >
-                Se déconnecter
+                Déconnexion
               </button>
             </div>
 
-            {/* Formulaire de mise à jour du tarif */}
-            <div className="flex justify-center">
+            {/* Formulaire principal */}
+            <div className="bg-white/10 backdrop-blur-lg rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8">
               <UpdateTarifForm />
-            </div>
-
-            {/* Section info */}
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 text-white text-center">
-              <p className="text-sm text-gray-300">
-                ✅ Vous êtes connecté en tant qu&apos;administrateur
-              </p>
             </div>
           </div>
         ) : (
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-md w-full text-center text-white" suppressHydrationWarning>
-            <h1 className="text-3xl md:text-4xl font-semibold mb-6">Admin Login</h1>
+          // Formulaire de connexion
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl sm:rounded-2xl p-6 sm:p-8 w-full max-w-md" suppressHydrationWarning>
+            <div className="text-center text-white mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-2">Admin Login</h1>
+              <p className="text-xs sm:text-sm text-gray-300">Connectez-vous pour gérer le site</p>
+            </div>
 
-            <form onSubmit={handleLogin} className="flex flex-col gap-4">
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+            <form onSubmit={handleLogin} className="space-y-4">
+              {error && (
+                <div className="bg-red-500/20 border border-red-500 text-red-100 px-4 py-3 rounded-lg text-sm">
+                  {error}
+                </div>
+              )}
 
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="p-3 rounded-xl bg-white/20 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white"
-                required
-              />
-              <input
-                type="password"
-                placeholder="Mot de passe"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="p-3 rounded-xl bg-white/20 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-white"
-                required
-              />
+              <div className="space-y-2">
+                <label htmlFor="email" className="block text-white text-sm font-medium">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="admin@exemple.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-3 sm:p-4 rounded-lg sm:rounded-xl bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/50 transition"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="password" className="block text-white text-sm font-medium">
+                  Mot de passe
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full p-3 sm:p-4 rounded-lg sm:rounded-xl bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/50 transition"
+                  required
+                />
+              </div>
+
               <button
                 type="submit"
-                className="bg-white/30 hover:bg-white/50 text-white font-semibold py-3 rounded-xl transition"
+                className="w-full bg-white/30 hover:bg-white/50 text-white font-semibold py-3 sm:py-4 rounded-lg sm:rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 Se connecter
               </button>
