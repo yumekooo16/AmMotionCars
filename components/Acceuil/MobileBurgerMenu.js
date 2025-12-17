@@ -120,7 +120,7 @@ export default function Navigation() {
         <nav className="flex flex-col gap-2">
           <NavLink href="/" onClick={handleNav} isMobile>Accueil</NavLink>
           <NavLink href="/services" onClick={handleNav} isMobile>Services</NavLink> 
-          <NavLink href="/tarifs" onClick={handleNav} isMobile>Tarifs</NavLink>
+          <NavLink href="/nos-packs" onClick={handleNav} isMobile>Tarifs</NavLink>
           <NavLink href="/a-propos" onClick={handleNav} isMobile>À propos</NavLink>
           <NavLink href="/contact" onClick={handleNav} isMobile>Contact</NavLink>
         </nav>
@@ -130,7 +130,7 @@ export default function Navigation() {
       <nav className="hidden lg:flex items-center gap-2 xl:gap-4">
         <NavLink href="/">Accueil</NavLink>
         <NavLink href="/services">Services</NavLink>
-        <NavLink href="/tarifs">Tarifs</NavLink>
+        <NavLink href="/nos-packs">Tarifs</NavLink>
         <NavLink href="/a-propos">À propos</NavLink>
         <NavLink href="/contact">Contact</NavLink>
       </nav>

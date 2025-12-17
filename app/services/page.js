@@ -52,7 +52,7 @@ export default function Services() {
           </h2>
 
         </div>
-        <Link href="/tarifs">
+        <Link href="/nos-packs">
           <button className="inline-block bg-[#5f6364] text-gray-900 font-semibold rounded-xl px-6 md:px-8 py-3 md:py-4 text-sm md:text-base transition mt-6">
             Découvrir nos Offres →
           </button>

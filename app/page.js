@@ -15,15 +15,15 @@ export default function Page() {
       <section className="relative w-full h-screen overflow-hidden" suppressHydrationWarning>
         {/* Background image using Next/Image */}
         <div className="absolute inset-0" suppressHydrationWarning>
-          <Image
-            src="/image/ChatGPT Image 21 nov. 2025, 13_18_34.webp"
-            alt="RS6 AM Motion fond"
-            fill
-            className="object-cover object-center brightness-50"
-            priority
-            sizes="100vw"
-          />
-        </div>
+  <Image
+    src="/image/audiRS6.webp"
+    alt="RS6 AM Motion fond"
+    fill
+    className="object-cover object-center brightness-50"
+    priority
+    sizes="100vw"
+  />
+</div>
 
         {/* Content */}
         <div className="relative z-10 h-full flex items-center justify-center px-4 md:px-8 lg:px-16">

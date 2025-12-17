@@ -5,7 +5,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 
-const ModalReservation = dynamic(() => import("./reservations"), { 
+const ModalReservation = dynamic(() => import("./reservations.js"), { 
   ssr: false,
   loading: () => null 
 });
@@ -78,34 +78,66 @@ export default function Vehicule() {
   const [vehiculesData, setVehiculesData] = useState({});
   const [tarifImages, setTarifImages] = useState({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const marques = useMemo(() => [
+    { nom: "Rolls Royce", key: "rolls royce" },
     { nom: "Mercedes", key: "mercedes" },
-    { nom: "Audi", key: "audi" },
-    { nom: "BMW", key: "bmw" },
-    { nom: "Porsche", key: "porsche" },
-    { nom: "Volkswagen", key: "volkswagen" }
   ], []);
 
   useEffect(() => {
     async function loadData() {
       try {
         setLoading(true);
-        const response = await fetch('/api/tarifs/get-all');
-        
+        setError(null);
+
+        // ✅ Ajout d'un timeout pour éviter les requêtes qui traînent
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 secondes max
+
+        const response = await fetch('/api/nos-packs/get-all', {
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        clearTimeout(timeoutId);
+
+        // ✅ Meilleure gestion des erreurs HTTP
         if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
+          const errorText = await response.text().catch(() => 'Erreur inconnue');
+          throw new Error(`Erreur HTTP ${response.status}: ${errorText}`);
+        }
+
+        // ✅ Validation du JSON avant parsing
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error(`Type de contenu invalide: ${contentType}`);
         }
 
         const data = await response.json();
 
+        // ✅ Validation de la structure de la réponse
+        if (!data) {
+          throw new Error('Réponse vide du serveur');
+        }
+
         if (data.success) {
-          if (data.tarifs) {
+          // ✅ Traitement des tarifs avec validation
+          if (data.tarifs && typeof data.tarifs === 'object') {
             setTarifImages(data.tarifs);
           }
 
+          // ✅ Traitement des véhicules avec validation
           if (data.vehicules && Array.isArray(data.vehicules)) {
             const grouped = data.vehicules.reduce((acc, vehicule) => {
+              // Validation de chaque véhicule
+              if (!vehicule.marque || !vehicule.nom) {
+                console.warn('Véhicule invalide ignoré:', vehicule);
+                return acc;
+              }
+
               const marque = vehicule.marque.toLowerCase();
               if (!acc[marque]) acc[marque] = [];
               acc[marque].push(vehicule);
@@ -114,13 +146,44 @@ export default function Vehicule() {
             
             setVehiculesData(grouped);
           }
+        } else {
+          // ✅ Gestion du cas où success = false
+          throw new Error(data.error || 'Échec du chargement des données');
         }
-      } catch (error) {
-        console.error("Erreur chargement données:", error);
+
+      } catch (err) {
+        // ✅ Meilleure gestion des différents types d'erreurs
+        let errorMessage = 'Erreur lors du chargement des données';
+
+        if (err.name === 'AbortError') {
+          errorMessage = 'La requête a pris trop de temps (timeout)';
+        } else if (err.message.includes('fetch')) {
+          errorMessage = 'Impossible de contacter le serveur';
+        } else if (err.message.includes('JSON')) {
+          errorMessage = 'Données reçues invalides';
+        } else if (err.message) {
+          errorMessage = err.message;
+        }
+
+        console.error('❌ Erreur chargement données:', {
+          message: errorMessage,
+          error: err,
+          stack: err.stack,
+          name: err.name,
+          type: typeof err
+        });
+
+        setError(errorMessage);
+        
+        // ✅ Données par défaut en cas d'erreur
+        setVehiculesData({});
+        setTarifImages({});
+
       } finally {
         setLoading(false);
       }
     }
+
     loadData();
   }, []);
 
@@ -157,21 +220,9 @@ export default function Vehicule() {
     setIsModalOpen(false);
   }, []);
 
-  const handleMarqueSelect = useCallback((e) => {
-    const id = e.target.value;
-    if (!id) return;
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
-
-  const handleRetourPacks = useCallback(() => {
+  const handleRetourTarifs = useCallback(() => {
     router.push('/nos-packs');
   }, [router]);
-
-  const marquesAvailable = useMemo(() => 
-    marques.filter(m => vehiculesData[m.key]?.length > 0),
-    [marques, vehiculesData]
-  );
 
   // ✅ Rendu de section optimisé
   const renderSection = useCallback((marque, index) => {
@@ -219,6 +270,7 @@ export default function Vehicule() {
     );
   }, [vehiculesData, tarifImages, visibleSections, openReservation]);
 
+  // ✅ État de chargement
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-12 flex justify-center items-center min-h-[50vh]">
@@ -230,12 +282,31 @@ export default function Vehicule() {
     );
   }
 
+  // ✅ Affichage d'erreur avec option de réessayer
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-12 flex justify-center items-center min-h-[50vh]">
+        <div className="text-center max-w-md bg-red-500/10 border border-red-500/20 rounded-2xl p-8">
+          <div className="text-red-500 text-5xl mb-4">⚠️</div>
+          <h3 className="text-white text-xl font-semibold mb-2">Erreur de chargement</h3>
+          <p className="text-gray-300 mb-6">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl transition-all"
+          >
+            Réessayer
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 mb-12">
-      {/* Bouton de retour vers nos packs */}
-      <div className="w-full px-4 mt-10 flex justify-center mb-6">
+      {/* Bouton de retour vers les tarifs */}
+      <div className="w-full px-4 mt-10 flex justify-center">
         <button
-          onClick={handleRetourPacks}
+          onClick={handleRetourTarifs}
           className="flex items-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-xl px-8 py-4 shadow-xl transition-all duration-300 group"
         >
           <svg 
@@ -250,32 +321,9 @@ export default function Vehicule() {
         </button>
       </div>
 
-      {/* Menu déroulant de recherche */}
-      <div className="w-full px-4 flex justify-center">
-        <div className="w-full max-w-xl bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl">
-          <p className="text-lg font-semibold text-white mb-4 text-center">
-            Rechercher un véhicule par marque
-          </p>
-          <div className="flex flex-col gap-3">
-            <label className="text-sm text-gray-300">Aller à :</label>
-            <select
-              className="w-full border border-white/20 text-white rounded-xl p-3 focus:outline-none focus:border-white/40 transition bg-black/20"
-              onChange={handleMarqueSelect}
-            >
-              <option value="">Sélectionnez une marque</option>
-              {marquesAvailable.map(m => (
-                <option key={m.key} value={m.nom.toLowerCase()}>
-                  {m.nom}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
-
       {marques.map(renderSection)}
 
-      {Object.keys(vehiculesData).length === 0 && !loading && (
+      {Object.keys(vehiculesData).length === 0 && !loading && !error && (
         <div className="text-center py-12">
           <p className="text-white text-lg">Aucun véhicule disponible pour le moment.</p>
         </div>

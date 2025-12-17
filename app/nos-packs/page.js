@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { createClient } from "@supabase/supabase-js";
 
 // ✅ Lazy loading du composant Mercedes
-const Mercedes = dynamic(() => import("@/components/Tarifs/vehicules"), {
+const Mercedes = dynamic(() => import("@/components/nos-packs/pack.js"), {
   loading: () => (
     <div className="flex justify-center items-center py-20">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
