@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useState, useMemo, useCallback, memo } from "react";
+import React, { useState, useCallback, memo, useEffect } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,6 @@ const ModalReservation = dynamic(() => import("./reservations.js"), {
   loading: () => null 
 });
 
-// ✅ Composant mémorisé pour les cartes de véhicules
 const VehiculeCard = memo(({ vehicule, onClick }) => {
   if (!vehicule.image_url || typeof vehicule.image_url !== 'string') {
     return null;
@@ -28,188 +27,229 @@ const VehiculeCard = memo(({ vehicule, onClick }) => {
         height={300}
         style={{ width: '100%', height: 'auto' }}
         loading="lazy"
-        quality={85}
+        quality={75}
         sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
       />
+      <div className="p-3 bg-white/5 backdrop-blur">
+        <h3 className="text-white font-medium text-center text-sm">{vehicule.nom}</h3>
+      </div>
     </div>
   );
 });
 
 VehiculeCard.displayName = 'VehiculeCard';
 
-// ✅ Composant mémorisé pour les flyers
-const FlyerImage = memo(({ flyerUrl, marqueName, isVisible }) => {
-  if (!flyerUrl) return null;
+const MarqueSection = memo(({ 
+  marque, 
+  isExpanded, 
+  onToggle, 
+  onLoadVehicules, 
+  vehicules, 
+  flyerUrl, 
+  onVehiculeClick, 
+  isLoading 
+}) => {
+  const handleExpand = useCallback(async () => {
+    if (!isExpanded && vehicules.length === 0) {
+      await onLoadVehicules(marque.key);
+    }
+    onToggle(marque.key);
+  }, [isExpanded, vehicules.length, onLoadVehicules, onToggle, marque.key]);
 
   return (
-    <div
-      className={`
-        w-full max-w-[350px] mx-auto mb-8 rounded-xl overflow-hidden shadow-md
-        aspect-[4/3] 
-        transform transition-transform duration-300 hover:scale-105
-        ${isVisible ? "opacity-100" : "opacity-0"}
-      `}
-      style={{
-        transform: isVisible ? 'translateY(0)' : 'translateY(2rem)',
-        transition: 'opacity 0.7s, transform 0.7s',
-      }}
-    >
-      <Image
-        src={flyerUrl}
-        alt={`Tarif ${marqueName}`}
-        width={500}
-        height={375}
-        style={{ width: '100%', height: 'auto' }}
-        loading="lazy"
-        quality={85}
-      />
+    <div className="scroll-mt-20 mb-6">
+      <button
+        onClick={handleExpand}
+        className="w-full text-left flex items-center justify-between bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-all group"
+      >
+        <div className="flex items-center gap-4">
+          <span className="text-2xl font-semibold italic text-[#5f6364] group-hover:text-white transition-colors">
+            {marque.nom}
+          </span>
+          {vehicules.length > 0 && (
+            <span className="text-sm text-gray-400 bg-white/5 px-3 py-1 rounded-full">
+              {vehicules.length} véhicule{vehicules.length > 1 ? 's' : ''}
+            </span>
+          )}
+        </div>
+        
+        <svg
+          className={`w-6 h-6 text-white transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isExpanded && (
+        <div className="mt-6 animate-slideDown">
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
+            </div>
+          ) : (
+            <>
+              {flyerUrl && (
+                <div className="w-full max-w-[350px] mx-auto mb-8 rounded-xl overflow-hidden shadow-md">
+                  <Image
+                    src={flyerUrl}
+                    alt={`Tarif ${marque.nom}`}
+                    width={500}
+                    height={375}
+                    style={{ width: '100%', height: 'auto' }}
+                    loading="lazy"
+                    quality={75}
+                  />
+                </div>
+              )}
+
+              {vehicules.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {vehicules.map((vehicule) => (
+                    <VehiculeCard
+                      key={vehicule.id}
+                      vehicule={vehicule}
+                      onClick={() => onVehiculeClick(vehicule.nom)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center text-gray-400 py-8">Aucun véhicule disponible</p>
+              )}
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 });
 
-FlyerImage.displayName = 'FlyerImage';
+MarqueSection.displayName = 'MarqueSection';
 
 export default function Vehicule() {
   const router = useRouter();
-  const sectionRefs = useRef([]);
-  const [visibleSections, setVisibleSections] = useState(new Set());
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedVehicule, setSelectedVehicule] = useState(null);
+  const [expandedMarques, setExpandedMarques] = useState(new Set());
   const [vehiculesData, setVehiculesData] = useState({});
   const [tarifImages, setTarifImages] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loadingMarques, setLoadingMarques] = useState(new Set());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedVehicule, setSelectedVehicule] = useState(null);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const marques = useMemo(() => [
-    { nom: "Rolls Royce", key: "rolls royce" },
-    { nom: "Mercedes", key: "mercedes" },
-  ], []);
+  // ✅ Configuration des marques avec les noms EXACTS de votre DB
+  const marques = [
+    { 
+      nom: "Rolls Royce", 
+      key: "rolls royce", // ✅ Exactement comme dans votre DB (avec espace, minuscules)
+      flyerKey: "flyer_url_rolls_royce" // ✅ À adapter selon le vrai nom dans nos_pack
+    },
+    { 
+      nom: "Mercedes", 
+      key: "mercedes", // ✅ Exactement comme dans votre DB
+      flyerKey: "flyer_url_mercedes"
+    },
+  ];
 
   useEffect(() => {
-    async function loadData() {
+    async function loadTarifs() {
       try {
-        setLoading(true);
         setError(null);
 
-        // ✅ Ajout d'un timeout pour éviter les requêtes qui traînent
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 secondes max
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-        const response = await fetch('/api/nos-packs/get-all', {
+        const response = await fetch('/api/nos-packs/get-tarifs-only', {
           signal: controller.signal,
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
         });
 
         clearTimeout(timeoutId);
 
-        // ✅ Meilleure gestion des erreurs HTTP
         if (!response.ok) {
-          const errorText = await response.text().catch(() => 'Erreur inconnue');
-          throw new Error(`Erreur HTTP ${response.status}: ${errorText}`);
-        }
-
-        // ✅ Validation du JSON avant parsing
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          throw new Error(`Type de contenu invalide: ${contentType}`);
+          throw new Error(`HTTP ${response.status}`);
         }
 
         const data = await response.json();
 
-        // ✅ Validation de la structure de la réponse
-        if (!data) {
-          throw new Error('Réponse vide du serveur');
-        }
-
-        if (data.success) {
-          // ✅ Traitement des tarifs avec validation
-          if (data.tarifs && typeof data.tarifs === 'object') {
-            setTarifImages(data.tarifs);
-          }
-
-          // ✅ Traitement des véhicules avec validation
-          if (data.vehicules && Array.isArray(data.vehicules)) {
-            const grouped = data.vehicules.reduce((acc, vehicule) => {
-              // Validation de chaque véhicule
-              if (!vehicule.marque || !vehicule.nom) {
-                console.warn('Véhicule invalide ignoré:', vehicule);
-                return acc;
-              }
-
-              const marque = vehicule.marque.toLowerCase();
-              if (!acc[marque]) acc[marque] = [];
-              acc[marque].push(vehicule);
-              return acc;
-            }, {});
-            
-            setVehiculesData(grouped);
-          }
-        } else {
-          // ✅ Gestion du cas où success = false
-          throw new Error(data.error || 'Échec du chargement des données');
+        if (data.success && data.tarifs) {
+          console.log('📋 Colonnes tarifs reçues:', Object.keys(data.tarifs));
+          setTarifImages(data.tarifs);
         }
 
       } catch (err) {
-        // ✅ Meilleure gestion des différents types d'erreurs
-        let errorMessage = 'Erreur lors du chargement des données';
-
+        let errorMessage = 'Erreur lors du chargement des tarifs';
         if (err.name === 'AbortError') {
-          errorMessage = 'La requête a pris trop de temps (timeout)';
-        } else if (err.message.includes('fetch')) {
-          errorMessage = 'Impossible de contacter le serveur';
-        } else if (err.message.includes('JSON')) {
-          errorMessage = 'Données reçues invalides';
-        } else if (err.message) {
-          errorMessage = err.message;
+          errorMessage = 'La requête a pris trop de temps';
         }
-
-        console.error('❌ Erreur chargement données:', {
-          message: errorMessage,
-          error: err,
-          stack: err.stack,
-          name: err.name,
-          type: typeof err
-        });
-
+        console.error("❌ Erreur chargement tarifs:", err);
         setError(errorMessage);
-        
-        // ✅ Données par défaut en cas d'erreur
-        setVehiculesData({});
-        setTarifImages({});
-
       } finally {
-        setLoading(false);
+        setInitialLoading(false);
       }
     }
 
-    loadData();
+    loadTarifs();
   }, []);
 
-  // ✅ Observer optimisé avec Set au lieu de Array
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        setVisibleSections(prev => {
-          const newSet = new Set(prev);
-          entries.forEach(entry => {
-            if (entry.isIntersecting && entry.target.id) {
-              newSet.add(entry.target.id);
-            }
-          });
-          return newSet;
-        });
-      },
-      { threshold: 0.1, rootMargin: '50px' }
-    );
+  const loadVehiculesForMarque = useCallback(async (marqueKey) => {
+    if (vehiculesData[marqueKey]?.length > 0 || loadingMarques.has(marqueKey)) {
+      return;
+    }
 
-    sectionRefs.current.forEach(ref => {
-      if (ref) observer.observe(ref);
+    setLoadingMarques(prev => new Set(prev).add(marqueKey));
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+      const response = await fetch(`/api/nos-packs/get-by-marque?marque=${encodeURIComponent(marqueKey)}`, {
+        signal: controller.signal,
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Erreur API:', errorData);
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success && data.vehicules) {
+        console.log(`✅ ${data.vehicules.length} véhicules chargés pour "${marqueKey}"`);
+        setVehiculesData(prev => ({
+          ...prev,
+          [marqueKey]: data.vehicules
+        }));
+      }
+
+    } catch (err) {
+      console.error(`❌ Erreur chargement ${marqueKey}:`, err);
+    } finally {
+      setLoadingMarques(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(marqueKey);
+        return newSet;
+      });
+    }
+  }, [vehiculesData, loadingMarques]);
+
+  const toggleMarque = useCallback((marqueKey) => {
+    setExpandedMarques(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(marqueKey)) {
+        newSet.delete(marqueKey);
+      } else {
+        newSet.add(marqueKey);
+      }
+      return newSet;
     });
-
-    return () => observer.disconnect();
-  }, [vehiculesData]);
+  }, []);
 
   const openReservation = useCallback((vehiculeName) => {
     setSelectedVehicule(vehiculeName);
@@ -220,69 +260,17 @@ export default function Vehicule() {
     setIsModalOpen(false);
   }, []);
 
-  const handleRetourTarifs = useCallback(() => {
-    router.push('/nos-packs');
-  }, [router]);
-
-  // ✅ Rendu de section optimisé
-  const renderSection = useCallback((marque, index) => {
-    const vehicules = vehiculesData[marque.key] || [];
-    const flyerUrl = tarifImages[`flyer_url_${marque.key}`];
-    
-    if (vehicules.length === 0) return null;
-
-    const isVisible = visibleSections.has(marque.nom.toLowerCase());
-
-    return (
-      <div
-        key={marque.key}
-        id={marque.nom.toLowerCase()}
-        ref={el => (sectionRefs.current[index] = el)}
-        className="scroll-mt-20 mb-12"
-      >
-        <span className="text-2xl font-semibold italic text-[#5f6364] block mt-12 mb-8">
-          {marque.nom}
-        </span>
-
-        <FlyerImage 
-          flyerUrl={flyerUrl} 
-          marqueName={marque.nom} 
-          isVisible={isVisible} 
-        />
-
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-          style={{
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'translateY(0)' : 'translateY(2rem)',
-            transition: 'opacity 0.7s, transform 0.7s',
-          }}
-        >
-          {vehicules.map((vehicule) => (
-            <VehiculeCard
-              key={vehicule.id}
-              vehicule={vehicule}
-              onClick={() => openReservation(vehicule.nom)}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }, [vehiculesData, tarifImages, visibleSections, openReservation]);
-
-  // ✅ État de chargement
-  if (loading) {
+  if (initialLoading) {
     return (
       <div className="container mx-auto px-4 py-12 flex justify-center items-center min-h-[50vh]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white text-lg">Chargement des véhicules...</p>
+          <p className="text-white text-lg">Chargement...</p>
         </div>
       </div>
     );
   }
 
-  // ✅ Affichage d'erreur avec option de réessayer
   if (error) {
     return (
       <div className="container mx-auto px-4 py-12 flex justify-center items-center min-h-[50vh]">
@@ -303,10 +291,9 @@ export default function Vehicule() {
 
   return (
     <div className="container mx-auto px-4 mb-12">
-      {/* Bouton de retour vers les tarifs */}
-      <div className="w-full px-4 mt-10 flex justify-center">
+      <div className="w-full px-4 mt-10 flex justify-center mb-8">
         <button
-          onClick={handleRetourTarifs}
+          onClick={() => router.push('/nos-packs')}
           className="flex items-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-xl px-8 py-4 shadow-xl transition-all duration-300 group"
         >
           <svg 
@@ -321,13 +308,29 @@ export default function Vehicule() {
         </button>
       </div>
 
-      {marques.map(renderSection)}
-
-      {Object.keys(vehiculesData).length === 0 && !loading && !error && (
-        <div className="text-center py-12">
-          <p className="text-white text-lg">Aucun véhicule disponible pour le moment.</p>
+      <div className="w-full px-4 mb-8">
+        <div className="max-w-2xl mx-auto bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center">
+          <p className="text-white text-lg font-medium">
+            ✨ Cliquez sur une marque pour découvrir nos véhicules premium
+          </p>
         </div>
-      )}
+      </div>
+
+      <div className="space-y-4 max-w-5xl mx-auto">
+        {marques.map((marque) => (
+          <MarqueSection
+            key={marque.key}
+            marque={marque}
+            isExpanded={expandedMarques.has(marque.key)}
+            onToggle={toggleMarque}
+            onLoadVehicules={loadVehiculesForMarque}
+            vehicules={vehiculesData[marque.key] || []}
+            flyerUrl={tarifImages[marque.flyerKey]}
+            onVehiculeClick={openReservation}
+            isLoading={loadingMarques.has(marque.key)}
+          />
+        ))}
+      </div>
 
       {isModalOpen && (
         <ModalReservation

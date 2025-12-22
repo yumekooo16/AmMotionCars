@@ -1,35 +1,37 @@
-import bundleAnalyzer from '@next/bundle-analyzer';
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-});
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Optimisation des images
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'lbeukcxiarqorufgtlmi.supabase.co',
-        pathname: '/**',
+        pathname: '/storage/v1/object/public/**',
       },
     ],
-    
+    // Qualités configurées pour optimiser la taille et la performance
+    qualities: [75, 85],
+    // Formats optimisés
     formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    // Dimensions par défaut pour éviter layout shift
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60 * 60 * 24 * 365,
-    qualities: [75, 85],  // ✅ Ajoutez ceci
-    // ❌ Retirez unoptimized: true
   },
-  
+
+  // Compression et minification
   compress: true,
+
+  // Optimisation du build
   productionBrowserSourceMaps: false,
-  
+
+  // Serveur externe packages
+  serverExternalPackages: ['bcrypt'],
+
+  // Headers pour cache optimal
   async headers() {
     return [
       {
-        source: '/image/:path*',
+        source: '/images/:path*',
         headers: [
           {
             key: 'Cache-Control',
@@ -38,20 +40,25 @@ const nextConfig = {
         ],
       },
       {
-        source: '/:path*.(jpg|jpeg|png|gif|webp|avif|svg|ico|woff|woff2)',
+        source: '/:path*',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            value: 'public, max-age=3600, s-maxage=3600',
           },
         ],
       },
     ];
   },
-  
-  experimental: {
-    optimizePackageImports: ['@supabase/supabase-js'],
+
+  // Redirects et rewrites
+  async rewrites() {
+    return {
+      beforeFiles: [],
+      afterFiles: [],
+      fallback: [],
+    };
   },
 };
 
-export default withBundleAnalyzer(nextConfig);
+export default nextConfig;

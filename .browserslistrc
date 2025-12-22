@@ -1,0 +1,15 @@
+# Optimisation des navigateurs pour réduire la taille du bundle
+# Cible les navigateurs modernes uniquement pour des polyfills minimaux
+
+# Production
+[production]
+last 2 versions
+> 0.2%
+not dead
+not op_mini all
+
+# Development
+[development]
+last 1 chrome version
+last 1 firefox version
+last 1 safari version

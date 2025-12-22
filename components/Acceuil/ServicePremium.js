@@ -37,7 +37,7 @@ export default function ServicePremium() {
       {/* Image responsive */}
       <img
         src="./image/glcammotion.webp"
-        alt="Mercedes glc pour decrire les Service Premium"
+        alt="Service Premium"
         className="rounded-2xl shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto mb-6 object-cover"
       />
 

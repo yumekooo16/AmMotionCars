@@ -34,7 +34,7 @@ export default function FlottePrestige() {
     >
       <img
         src="/image/audixglcammotion2.webp"
-        alt="audi avec un glc pour decrire la Flotte de prestige"
+        alt="Flotte de prestige"
         className="rounded-2xl shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto mb-6 object-cover"
       />
       <h2 className="text-3xl md:text-4xl font-bold text-center text-white -400 mb-4">Flotte de prestige</h2>

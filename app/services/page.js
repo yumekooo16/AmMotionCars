@@ -3,9 +3,23 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Audiovisuel from "@/components/Nosservices/audiovisuel";
-import Evenement from "@/components/Nosservices/evenements";
-import VIP from "@/components/Nosservices/VIP";
+import dynamic from "next/dynamic";
+
+// ✅ Lazy loading des services
+const Audiovisuel = dynamic(() => import("@/components/Nosservices/audiovisuel"), {
+  loading: () => <div className="h-64 bg-gray-900 animate-pulse rounded-xl" />,
+  ssr: true
+});
+
+const Evenement = dynamic(() => import("@/components/Nosservices/evenements"), {
+  loading: () => <div className="h-64 bg-gray-900 animate-pulse rounded-xl" />,
+  ssr: true
+});
+
+const VIP = dynamic(() => import("@/components/Nosservices/VIP"), {
+  loading: () => <div className="h-64 bg-gray-900 animate-pulse rounded-xl" />,
+  ssr: true
+});
 
 
 

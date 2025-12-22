@@ -1,12 +1,30 @@
  'use client'
 
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import ServicePremium from "@/components/Acceuil/ServicePremium";
-import Evenement from "@/components/Acceuil/Evenement";
-import FlottePrestige from "@/components/Acceuil/FlottePrestige";
-import Carousel from "@/components/Acceuil/Carousel"
+import dynamic from "next/dynamic";
+
+// ✅ Lazy loading des composants lourds
+const ServicePremium = dynamic(() => import("@/components/Acceuil/ServicePremium"), {
+  loading: () => <div className="h-96 bg-gray-900 animate-pulse" />,
+  ssr: true
+});
+
+const Evenement = dynamic(() => import("@/components/Acceuil/Evenement"), {
+  loading: () => <div className="h-96 bg-gray-900 animate-pulse" />,
+  ssr: true
+});
+
+const FlottePrestige = dynamic(() => import("@/components/Acceuil/FlottePrestige"), {
+  loading: () => <div className="h-96 bg-gray-900 animate-pulse" />,
+  ssr: true
+});
+
+const Carousel = dynamic(() => import("@/components/Acceuil/Carousel"), {
+  loading: () => <div className="h-96 bg-gray-900 animate-pulse" />,
+  ssr: true
+});
 
 export default function Page() {
   return (
@@ -15,15 +33,15 @@ export default function Page() {
       <section className="relative w-full h-screen overflow-hidden" suppressHydrationWarning>
         {/* Background image using Next/Image */}
         <div className="absolute inset-0" suppressHydrationWarning>
-  <Image
-    src="/image/audiRS6.webp"
-    alt="RS6 AM Motion fond"
-    fill
-    className="object-cover object-center brightness-50"
-    priority
-    sizes="100vw"
-  />
-</div>
+          <Image
+            src="/image/audiRS6.webp"
+            alt="RS6 AM Motion"
+            fill
+            className="object-cover object-center brightness-50"
+            priority
+            sizes="100vw"
+          />
+        </div>
 
         {/* Content */}
         <div className="relative z-10 h-full flex items-center justify-center px-4 md:px-8 lg:px-16">

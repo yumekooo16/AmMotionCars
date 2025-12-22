@@ -9,16 +9,6 @@ export default function PolitiqueConfidentialite() {
     <div className="bg-black min-h-screen" suppressHydrationWarning>
       {/* Hero Section */}
       <section className="relative w-full h-[60vh] overflow-hidden" suppressHydrationWarning>
-        <div className="absolute inset-0" suppressHydrationWarning>
-          <Image
-            src="/image/ChatGPT Image 21 nov. 2025, 13_18_34.webp"
-            alt="Politique de confidentialité AM Motion"
-            fill
-            className="object-cover object-center brightness-[0.35]"
-            priority
-            sizes="100vw"
-          />
-        </div>
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white z-10 px-6" suppressHydrationWarning>
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-[0.06em] mb-4">
             POLITIQUE DE CONFIDENTIALITÉ
