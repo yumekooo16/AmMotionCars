@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, memo, useEffect } from "react";
+import React, { useRef, useEffect, useState, useMemo, useCallback, memo } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,7 @@ const ModalReservation = dynamic(() => import("./reservations.js"), {
   loading: () => null 
 });
 
+// ✅ Composant carte véhicule simple
 const VehiculeCard = memo(({ vehicule, onClick }) => {
   if (!vehicule.image_url || typeof vehicule.image_url !== 'string') {
     return null;
@@ -39,7 +40,80 @@ const VehiculeCard = memo(({ vehicule, onClick }) => {
 
 VehiculeCard.displayName = 'VehiculeCard';
 
-const MarqueSection = memo(({ 
+// ✅ Composant flyer simple
+const FlyerImage = memo(({ flyerUrl, marqueName, isVisible, isMobile }) => {
+  if (!flyerUrl) return null;
+
+  return (
+    <div
+      className={`
+        w-full mx-auto mb-8 rounded-xl overflow-hidden shadow-md
+        ${isMobile ? 'max-w-[420px] md:max-w-[640px] lg:max-w-[900px]' : 'max-w-[420px] md:max-w-[640px] lg:max-w-[900px]'}
+        transform transition-transform duration-300 hover:scale-105
+        ${isVisible ? "opacity-100" : "opacity-0"}
+      `}
+      style={{
+        transform: isVisible ? 'translateY(0)' : 'translateY(2rem)',
+        transition: 'opacity 0.7s, transform 0.7s',
+      }}
+    >
+      <Image
+        src={flyerUrl}
+        alt={`Tarif ${marqueName}`}
+        width={900}
+        height={675}
+        style={{ width: '100%', height: 'auto' }}
+        loading="lazy"
+        quality={75}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 75vw, 50vw"
+      />
+    </div>
+  );
+});
+
+FlyerImage.displayName = 'FlyerImage';
+
+// ✅ Section Desktop (tout affiché)
+const DesktopSection = memo(({ marque, vehicules, flyerUrl, isVisible, onVehiculeClick }) => {
+  if (vehicules.length === 0) return null;
+
+  return (
+    <div className="scroll-mt-20 mb-12">
+      <span className="text-2xl font-semibold italic text-[#5f6364] block mt-12 mb-8">
+        {marque.nom}
+      </span>
+
+      <FlyerImage 
+        flyerUrl={flyerUrl} 
+        marqueName={marque.nom} 
+        isVisible={isVisible}
+        isMobile={false}
+      />
+
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(2rem)',
+          transition: 'opacity 0.7s, transform 0.7s',
+        }}
+      >
+        {vehicules.map((vehicule) => (
+          <VehiculeCard
+            key={vehicule.id}
+            vehicule={vehicule}
+            onClick={() => onVehiculeClick(vehicule.nom)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+});
+
+DesktopSection.displayName = 'DesktopSection';
+
+// ✅ Section Mobile (expand/collapse)
+const MobileSection = memo(({ 
   marque, 
   isExpanded, 
   onToggle, 
@@ -84,26 +158,19 @@ const MarqueSection = memo(({
       </button>
 
       {isExpanded && (
-        <div className="mt-6 animate-slideDown">
+        <div className="mt-6">
           {isLoading ? (
             <div className="flex justify-center py-12">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
             </div>
           ) : (
             <>
-              {flyerUrl && (
-                <div className="w-full max-w-[350px] mx-auto mb-8 rounded-xl overflow-hidden shadow-md">
-                  <Image
-                    src={flyerUrl}
-                    alt={`Tarif ${marque.nom}`}
-                    width={500}
-                    height={375}
-                    style={{ width: '100%', height: 'auto' }}
-                    loading="lazy"
-                    quality={75}
-                  />
-                </div>
-              )}
+              <FlyerImage 
+                flyerUrl={flyerUrl} 
+                marqueName={marque.nom} 
+                isVisible={true}
+                isMobile={true}
+              />
 
               {vehicules.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -126,76 +193,157 @@ const MarqueSection = memo(({
   );
 });
 
-MarqueSection.displayName = 'MarqueSection';
+MobileSection.displayName = 'MobileSection';
 
 export default function Vehicule() {
   const router = useRouter();
-  const [expandedMarques, setExpandedMarques] = useState(new Set());
-  const [vehiculesData, setVehiculesData] = useState({});
-  const [tarifImages, setTarifImages] = useState({});
-  const [loadingMarques, setLoadingMarques] = useState(new Set());
+  const sectionRefs = useRef([]);
+  const [visibleSections, setVisibleSections] = useState(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedVehicule, setSelectedVehicule] = useState(null);
-  const [initialLoading, setInitialLoading] = useState(true);
+  const [vehiculesData, setVehiculesData] = useState({});
+  const [tarifImages, setTarifImages] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(null);
+  const [expandedMarques, setExpandedMarques] = useState(new Set());
+  const [loadingMarques, setLoadingMarques] = useState(new Set());
   const [error, setError] = useState(null);
 
-  // ✅ Configuration des marques avec les noms EXACTS de votre DB
-  const marques = [
+  // ✅ Configuration des marques
+  const marques = useMemo(() => [
     { 
       nom: "Rolls Royce", 
-      key: "rolls royce", // ✅ Exactement comme dans votre DB (avec espace, minuscules)
-      flyerKey: "flyer_url_rolls_royce" // ✅ À adapter selon le vrai nom dans nos_pack
+      key: "rolls royce",
+      flyerKey: "flyer_url_rolls_royce"
     },
     { 
       nom: "Mercedes", 
-      key: "mercedes", // ✅ Exactement comme dans votre DB
+      key: "mercedes",
       flyerKey: "flyer_url_mercedes"
     },
-  ];
+  ], []);
 
+  // ✅ Détection mobile simple
   useEffect(() => {
-    async function loadTarifs() {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // ✅ Chargement initial - DESKTOP charge tout, MOBILE charge seulement les tarifs
+  useEffect(() => {
+    if (isMobile === null) return;
+
+    async function loadData() {
       try {
+        setLoading(true);
         setError(null);
 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-        const response = await fetch('/api/nos-packs/get-tarifs-only', {
-          signal: controller.signal,
-          headers: { 'Content-Type': 'application/json' },
-        });
+        if (isMobile) {
+          // Mobile : charge uniquement les tarifs
+          const response = await fetch('/api/nos-packs/get-tarifs-only', {
+            signal: controller.signal,
+            headers: { 'Content-Type': 'application/json' },
+          });
 
-        clearTimeout(timeoutId);
+          clearTimeout(timeoutId);
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
 
-        const data = await response.json();
+          const data = await response.json();
 
-        if (data.success && data.tarifs) {
-          console.log('📋 Colonnes tarifs reçues:', Object.keys(data.tarifs));
-          setTarifImages(data.tarifs);
+          if (data.success && data.tarifs) {
+            console.log('📋 Colonnes tarifs reçues:', Object.keys(data.tarifs));
+            setTarifImages(data.tarifs);
+          }
+        } else {
+          // Desktop : charge tout
+          const response = await fetch('/api/nos-packs/get-all', {
+            signal: controller.signal,
+            headers: { 'Content-Type': 'application/json' },
+          });
+
+          clearTimeout(timeoutId);
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          if (data.success) {
+            if (data.tarifs) {
+              console.log('📋 Colonnes tarifs reçues:', Object.keys(data.tarifs));
+              setTarifImages(data.tarifs);
+            }
+
+            if (data.vehicules && Array.isArray(data.vehicules)) {
+              const grouped = data.vehicules.reduce((acc, vehicule) => {
+                const marque = vehicule.marque.toLowerCase();
+                if (!acc[marque]) acc[marque] = [];
+                acc[marque].push(vehicule);
+                return acc;
+              }, {});
+              
+              console.log('🚗 Véhicules groupés par marque:', Object.keys(grouped));
+              setVehiculesData(grouped);
+            }
+          }
         }
 
       } catch (err) {
-        let errorMessage = 'Erreur lors du chargement des tarifs';
+        let errorMessage = 'Erreur lors du chargement des données';
         if (err.name === 'AbortError') {
           errorMessage = 'La requête a pris trop de temps';
         }
-        console.error("❌ Erreur chargement tarifs:", err);
+        console.error("❌ Erreur chargement:", err);
         setError(errorMessage);
       } finally {
-        setInitialLoading(false);
+        setLoading(false);
       }
     }
 
-    loadTarifs();
-  }, []);
+    loadData();
+  }, [isMobile]);
 
+  // ✅ Observer simple pour desktop
+  useEffect(() => {
+    if (isMobile) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        setVisibleSections(prev => {
+          const newSet = new Set(prev);
+          entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target.id) {
+              newSet.add(entry.target.id);
+            }
+          });
+          return newSet;
+        });
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    );
+
+    sectionRefs.current.forEach(ref => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, [vehiculesData, isMobile]);
+
+  // ✅ Chargement progressif par marque (mobile uniquement)
   const loadVehiculesForMarque = useCallback(async (marqueKey) => {
-    if (vehiculesData[marqueKey]?.length > 0 || loadingMarques.has(marqueKey)) {
+    if (!isMobile || vehiculesData[marqueKey]?.length > 0 || loadingMarques.has(marqueKey)) {
       return;
     }
 
@@ -237,7 +385,7 @@ export default function Vehicule() {
         return newSet;
       });
     }
-  }, [vehiculesData, loadingMarques]);
+  }, [isMobile, vehiculesData, loadingMarques]);
 
   const toggleMarque = useCallback((marqueKey) => {
     setExpandedMarques(prev => {
@@ -260,12 +408,18 @@ export default function Vehicule() {
     setIsModalOpen(false);
   }, []);
 
-  if (initialLoading) {
+  const handleRetourPacks = useCallback(() => {
+    router.push('/nos-packs');
+  }, [router]);
+
+  if (loading || isMobile === null) {
     return (
       <div className="container mx-auto px-4 py-12 flex justify-center items-center min-h-[50vh]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white text-lg">Chargement...</p>
+          <p className="text-white text-lg">
+            {isMobile ? 'Chargement des tarifs...' : 'Chargement des véhicules...'}
+          </p>
         </div>
       </div>
     );
@@ -291,9 +445,10 @@ export default function Vehicule() {
 
   return (
     <div className="container mx-auto px-4 mb-12">
+      {/* Bouton retour */}
       <div className="w-full px-4 mt-10 flex justify-center mb-8">
         <button
-          onClick={() => router.push('/nos-packs')}
+          onClick={handleRetourPacks}
           className="flex items-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-xl px-8 py-4 shadow-xl transition-all duration-300 group"
         >
           <svg 
@@ -308,29 +463,67 @@ export default function Vehicule() {
         </button>
       </div>
 
+      {/* Info */}
       <div className="w-full px-4 mb-8">
         <div className="max-w-2xl mx-auto bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center">
           <p className="text-white text-lg font-medium">
-            ✨ Cliquez sur une marque pour découvrir nos véhicules premium
+            {isMobile 
+              ? "✨ Cliquez sur une marque pour découvrir nos véhicules premium"
+              : "✨ Découvrez nos véhicules premium par marque"
+            }
           </p>
         </div>
       </div>
 
-      <div className="space-y-4 max-w-5xl mx-auto">
-        {marques.map((marque) => (
-          <MarqueSection
-            key={marque.key}
-            marque={marque}
-            isExpanded={expandedMarques.has(marque.key)}
-            onToggle={toggleMarque}
-            onLoadVehicules={loadVehiculesForMarque}
-            vehicules={vehiculesData[marque.key] || []}
-            flyerUrl={tarifImages[marque.flyerKey]}
-            onVehiculeClick={openReservation}
-            isLoading={loadingMarques.has(marque.key)}
-          />
-        ))}
-      </div>
+      {/* Affichage Desktop ou Mobile */}
+      {isMobile ? (
+        <div className="space-y-4 max-w-5xl mx-auto">
+          {marques.map((marque) => (
+            <MobileSection
+              key={marque.key}
+              marque={marque}
+              isExpanded={expandedMarques.has(marque.key)}
+              onToggle={toggleMarque}
+              onLoadVehicules={loadVehiculesForMarque}
+              vehicules={vehiculesData[marque.key] || []}
+              flyerUrl={tarifImages[marque.flyerKey]}
+              onVehiculeClick={openReservation}
+              isLoading={loadingMarques.has(marque.key)}
+            />
+          ))}
+        </div>
+      ) : (
+        marques.map((marque, index) => {
+          const vehicules = vehiculesData[marque.key] || [];
+          const flyerUrl = tarifImages[marque.flyerKey];
+          
+          if (vehicules.length === 0) return null;
+
+          const isVisible = visibleSections.has(marque.nom.toLowerCase());
+
+          return (
+            <div
+              key={marque.key}
+              id={marque.nom.toLowerCase()}
+              ref={el => (sectionRefs.current[index] = el)}
+            >
+              <DesktopSection
+                marque={marque}
+                vehicules={vehicules}
+                flyerUrl={flyerUrl}
+                isVisible={isVisible}
+                onVehiculeClick={openReservation}
+              />
+            </div>
+          );
+        })
+      )}
+
+      {Object.keys(vehiculesData).length === 0 && !loading && !isMobile && (
+        <div className="text-center py-12">
+          <p className="text-white text-lg">Aucun véhicule disponible pour le moment.</p>
+        </div>
+      )}
 
       {isModalOpen && (
         <ModalReservation

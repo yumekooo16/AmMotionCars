@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, memo, useEffect } from "react";
+import React, { useRef, useEffect, useState, useMemo, useCallback, memo } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -10,9 +10,11 @@ const ModalReservation = dynamic(() => import("./reservations"), {
   loading: () => null 
 });
 
-// ✅ Composant carte véhicule
+// ✅ Composant carte véhicule simple
 const VehiculeCard = memo(({ vehicule, onClick }) => {
-  if (!vehicule.image_url) return null;
+  if (!vehicule.image_url || typeof vehicule.image_url !== 'string') {
+    return null;
+  }
 
   return (
     <div
@@ -26,11 +28,11 @@ const VehiculeCard = memo(({ vehicule, onClick }) => {
         height={300}
         style={{ width: '100%', height: 'auto' }}
         loading="lazy"
-        quality={75}
+        quality={85}
         sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
       />
-      <div className="p-4 bg-white/5 backdrop-blur">
-        <h3 className="text-white font-semibold text-center">{vehicule.nom}</h3>
+      <div className="p-3 bg-white/5 backdrop-blur">
+        <h3 className="text-white font-medium text-center text-sm">{vehicule.nom}</h3>
       </div>
     </div>
   );
@@ -38,8 +40,80 @@ const VehiculeCard = memo(({ vehicule, onClick }) => {
 
 VehiculeCard.displayName = 'VehiculeCard';
 
-// ✅ Section de marque avec expand/collapse
-const MarqueSection = memo(({ 
+// ✅ Composant flyer simple
+const FlyerImage = memo(({ flyerUrl, marqueName, isVisible, isMobile }) => {
+  if (!flyerUrl) return null;
+
+  return (
+    <div
+      className={`
+        w-full mx-auto mb-8 rounded-xl overflow-hidden shadow-md
+        ${isMobile ? 'max-w-full' : 'max-w-[350px]'}
+        aspect-[4/3] 
+        transform transition-transform duration-300 hover:scale-105
+        ${isVisible ? "opacity-100" : "opacity-0"}
+      `}
+      style={{
+        transform: isVisible ? 'translateY(0)' : 'translateY(2rem)',
+        transition: 'opacity 0.7s, transform 0.7s',
+      }}
+    >
+      <Image
+        src={flyerUrl}
+        alt={`Tarif ${marqueName}`}
+        width={500}
+        height={375}
+        style={{ width: '100%', height: 'auto' }}
+        loading="lazy"
+        quality={85}
+      />
+    </div>
+  );
+});
+
+FlyerImage.displayName = 'FlyerImage';
+
+// ✅ Section Desktop simple
+const DesktopSection = memo(({ marque, vehicules, flyerUrl, isVisible, onVehiculeClick }) => {
+  if (vehicules.length === 0) return null;
+
+  return (
+    <div className="scroll-mt-20 mb-12">
+      <span className="text-2xl font-semibold italic text-[#5f6364] block mt-12 mb-8">
+        {marque.nom}
+      </span>
+
+      <FlyerImage 
+        flyerUrl={flyerUrl} 
+        marqueName={marque.nom} 
+        isVisible={isVisible}
+        isMobile={false}
+      />
+
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(2rem)',
+          transition: 'opacity 0.7s, transform 0.7s',
+        }}
+      >
+        {vehicules.map((vehicule) => (
+          <VehiculeCard
+            key={vehicule.id}
+            vehicule={vehicule}
+            onClick={() => onVehiculeClick(vehicule.nom)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+});
+
+DesktopSection.displayName = 'DesktopSection';
+
+// ✅ Section Mobile simple
+const MobileSection = memo(({ 
   marque, 
   isExpanded, 
   onToggle, 
@@ -58,7 +132,6 @@ const MarqueSection = memo(({
 
   return (
     <div className="scroll-mt-20 mb-6">
-      {/* Header cliquable */}
       <button
         onClick={handleExpand}
         className="w-full text-left flex items-center justify-between bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-all group"
@@ -84,33 +157,25 @@ const MarqueSection = memo(({
         </svg>
       </button>
 
-      {/* Contenu */}
       {isExpanded && (
-        <div className="mt-4 animate-slideDown">
+        <div className="mt-4">
           {isLoading ? (
             <div className="flex justify-center py-12">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
             </div>
           ) : (
             <>
-              {/* Flyer tarif */}
               {flyerUrl && (
-                <div className="w-full max-w-[400px] mx-auto mb-8 rounded-xl overflow-hidden shadow-lg">
-                  <Image
-                    src={flyerUrl}
-                    alt={`Tarifs ${marque.nom}`}
-                    width={500}
-                    height={375}
-                    style={{ width: '100%', height: 'auto' }}
-                    loading="lazy"
-                    quality={80}
-                  />
-                </div>
+                <FlyerImage 
+                  flyerUrl={flyerUrl} 
+                  marqueName={marque.nom} 
+                  isVisible={true}
+                  isMobile={true}
+                />
               )}
 
-              {/* Grille véhicules */}
               {vehicules.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {vehicules.map((vehicule) => (
                     <VehiculeCard
                       key={vehicule.id}
@@ -120,7 +185,7 @@ const MarqueSection = memo(({
                   ))}
                 </div>
               ) : (
-                <p className="text-center text-gray-400 py-8">Aucun véhicule disponible pour cette marque</p>
+                <p className="text-center text-gray-400 py-8">Aucun véhicule disponible</p>
               )}
             </>
           )}
@@ -130,51 +195,121 @@ const MarqueSection = memo(({
   );
 });
 
-MarqueSection.displayName = 'MarqueSection';
+MobileSection.displayName = 'MobileSection';
 
-// ✅ Composant principal
 export default function Vehicule() {
   const router = useRouter();
-  const [expandedMarques, setExpandedMarques] = useState(new Set());
-  const [vehiculesData, setVehiculesData] = useState({});
-  const [tarifImages, setTarifImages] = useState({});
-  const [loadingMarques, setLoadingMarques] = useState(new Set());
+  const sectionRefs = useRef([]);
+  const [visibleSections, setVisibleSections] = useState(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedVehicule, setSelectedVehicule] = useState(null);
-  const [initialLoading, setInitialLoading] = useState(true);
+  const [vehiculesData, setVehiculesData] = useState({});
+  const [tarifImages, setTarifImages] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(null);
+  const [expandedMarques, setExpandedMarques] = useState(new Set());
+  const [loadingMarques, setLoadingMarques] = useState(new Set());
 
-  const marques = [
+  const marques = useMemo(() => [
     { nom: "Mercedes", key: "mercedes" },
     { nom: "Audi", key: "audi" },
     { nom: "BMW", key: "bmw" },
     { nom: "Porsche", key: "porsche" },
     { nom: "Volkswagen", key: "volkswagen" }
-  ];
+  ], []);
 
-  // ✅ Chargement initial LÉGER
+  // ✅ Détection mobile simple
   useEffect(() => {
-    async function loadTarifs() {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // ✅ Chargement initial simple
+  useEffect(() => {
+    if (isMobile === null) return;
+
+    async function loadData() {
       try {
-        const response = await fetch('/api/tarifs/get-tarifs-only');
-        if (response.ok) {
+        setLoading(true);
+        
+        if (isMobile) {
+          const response = await fetch('/api/tarifs/get-tarifs-only');
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.tarifs) {
+              setTarifImages(data.tarifs);
+            }
+          }
+        } else {
+          const response = await fetch('/api/tarifs/get-all');
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
           const data = await response.json();
-          if (data.success && data.tarifs) {
-            setTarifImages(data.tarifs);
+
+          if (data.success) {
+            if (data.tarifs) {
+              setTarifImages(data.tarifs);
+            }
+
+            if (data.vehicules && Array.isArray(data.vehicules)) {
+              const grouped = data.vehicules.reduce((acc, vehicule) => {
+                const marque = vehicule.marque.toLowerCase();
+                if (!acc[marque]) acc[marque] = [];
+                acc[marque].push(vehicule);
+                return acc;
+              }, {});
+              
+              setVehiculesData(grouped);
+            }
           }
         }
       } catch (error) {
-        console.error("❌ Erreur chargement tarifs:", error);
+        console.error("Erreur chargement données:", error);
       } finally {
-        setInitialLoading(false);
+        setLoading(false);
       }
     }
-    loadTarifs();
-  }, []);
 
-  // ✅ Chargement progressif par marque
+    loadData();
+  }, [isMobile]);
+
+  // ✅ Observer simple pour desktop
+  useEffect(() => {
+    if (isMobile) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        setVisibleSections(prev => {
+          const newSet = new Set(prev);
+          entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target.id) {
+              newSet.add(entry.target.id);
+            }
+          });
+          return newSet;
+        });
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    );
+
+    sectionRefs.current.forEach(ref => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, [vehiculesData, isMobile]);
+
+  // ✅ Chargement progressif par marque (mobile)
   const loadVehiculesForMarque = useCallback(async (marqueKey) => {
-    // Éviter double chargement
-    if (vehiculesData[marqueKey]?.length > 0 || loadingMarques.has(marqueKey)) {
+    if (!isMobile || vehiculesData[marqueKey]?.length > 0 || loadingMarques.has(marqueKey)) {
       return;
     }
 
@@ -196,7 +331,7 @@ export default function Vehicule() {
         }));
       }
     } catch (error) {
-      console.error(`❌ Erreur chargement ${marqueKey}:`, error);
+      console.error(`Erreur chargement ${marqueKey}:`, error);
     } finally {
       setLoadingMarques(prev => {
         const newSet = new Set(prev);
@@ -204,7 +339,7 @@ export default function Vehicule() {
         return newSet;
       });
     }
-  }, [vehiculesData, loadingMarques]);
+  }, [isMobile, vehiculesData, loadingMarques]);
 
   const toggleMarque = useCallback((marqueKey) => {
     setExpandedMarques(prev => {
@@ -227,12 +362,30 @@ export default function Vehicule() {
     setIsModalOpen(false);
   }, []);
 
-  if (initialLoading) {
+  const handleMarqueSelect = useCallback((e) => {
+    const id = e.target.value;
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  const handleRetourPacks = useCallback(() => {
+    router.push('/nos-packs');
+  }, [router]);
+
+  const marquesAvailable = useMemo(() => 
+    marques.filter(m => vehiculesData[m.key]?.length > 0),
+    [marques, vehiculesData]
+  );
+
+  if (loading || isMobile === null) {
     return (
       <div className="container mx-auto px-4 py-12 flex justify-center items-center min-h-[50vh]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white text-lg">Chargement des tarifs...</p>
+          <p className="text-white text-lg">
+            {isMobile ? 'Chargement des tarifs...' : 'Chargement des véhicules...'}
+          </p>
         </div>
       </div>
     );
@@ -241,9 +394,9 @@ export default function Vehicule() {
   return (
     <div className="container mx-auto px-4 mb-12">
       {/* Bouton retour */}
-      <div className="w-full px-4 mt-10 flex justify-center mb-8">
+      <div className="w-full px-4 mt-10 flex justify-center mb-6">
         <button
-          onClick={() => router.push('/nos-packs')}
+          onClick={handleRetourPacks}
           className="flex items-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-xl px-8 py-4 shadow-xl transition-all duration-300 group"
         >
           <svg 
@@ -258,33 +411,89 @@ export default function Vehicule() {
         </button>
       </div>
 
-      {/* Info */}
-      <div className="w-full px-4 mb-8">
-        <div className="max-w-2xl mx-auto bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center">
-          <p className="text-white text-lg font-medium">
-            ✨ Cliquez sur une marque pour découvrir nos véhicules disponibles
-          </p>
+      {/* Menu Desktop ou Info Mobile */}
+      {isMobile ? (
+        <div className="w-full px-4 mb-8">
+          <div className="max-w-2xl mx-auto bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center">
+            <p className="text-white text-lg font-medium">
+              ✨ Cliquez sur une marque pour découvrir nos véhicules disponibles
+            </p>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="w-full px-4 flex justify-center mb-8">
+          <div className="w-full max-w-xl bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl">
+            <p className="text-lg font-semibold text-white mb-4 text-center">
+              Rechercher un véhicule par marque
+            </p>
+            <div className="flex flex-col gap-3">
+              <label className="text-sm text-gray-300">Aller à :</label>
+              <select
+                className="w-full border border-white/20 text-white rounded-xl p-3 focus:outline-none focus:border-white/40 transition bg-black/20"
+                onChange={handleMarqueSelect}
+              >
+                <option value="">Sélectionnez une marque</option>
+                {marquesAvailable.map(m => (
+                  <option key={m.key} value={m.nom.toLowerCase()}>
+                    {m.nom}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
 
-      {/* Liste marques */}
-      <div className="space-y-4 max-w-5xl mx-auto">
-        {marques.map((marque) => (
-          <MarqueSection
-            key={marque.key}
-            marque={marque}
-            isExpanded={expandedMarques.has(marque.key)}
-            onToggle={toggleMarque}
-            onLoadVehicules={loadVehiculesForMarque}
-            vehicules={vehiculesData[marque.key] || []}
-            flyerUrl={tarifImages[`flyer_url_${marque.key}`]}
-            onVehiculeClick={openReservation}
-            isLoading={loadingMarques.has(marque.key)}
-          />
-        ))}
-      </div>
+      {/* Affichage Desktop ou Mobile */}
+      {isMobile ? (
+        <div className="space-y-4 max-w-5xl mx-auto">
+          {marques.map((marque) => (
+            <MobileSection
+              key={marque.key}
+              marque={marque}
+              isExpanded={expandedMarques.has(marque.key)}
+              onToggle={toggleMarque}
+              onLoadVehicules={loadVehiculesForMarque}
+              vehicules={vehiculesData[marque.key] || []}
+              flyerUrl={tarifImages[`flyer_url_${marque.key}`]}
+              onVehiculeClick={openReservation}
+              isLoading={loadingMarques.has(marque.key)}
+            />
+          ))}
+        </div>
+      ) : (
+        marques.map((marque, index) => {
+          const vehicules = vehiculesData[marque.key] || [];
+          const flyerUrl = tarifImages[`flyer_url_${marque.key}`];
+          
+          if (vehicules.length === 0) return null;
 
-      {/* Modal réservation */}
+          const isVisible = visibleSections.has(marque.nom.toLowerCase());
+
+          return (
+            <div
+              key={marque.key}
+              id={marque.nom.toLowerCase()}
+              ref={el => (sectionRefs.current[index] = el)}
+            >
+              <DesktopSection
+                marque={marque}
+                vehicules={vehicules}
+                flyerUrl={flyerUrl}
+                isVisible={isVisible}
+                onVehiculeClick={openReservation}
+              />
+            </div>
+          );
+        })
+      )}
+
+      {Object.keys(vehiculesData).length === 0 && !loading && !isMobile && (
+        <div className="text-center py-12">
+          <p className="text-white text-lg">Aucun véhicule disponible pour le moment.</p>
+        </div>
+      )}
+
       {isModalOpen && (
         <ModalReservation
           isOpen={isModalOpen}

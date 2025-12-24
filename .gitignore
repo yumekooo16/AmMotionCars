@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+.browserslistrc
+
+babel.config.js
+
+eslint.config.mjs
+
+PERFORMANCE_GUIDE.md

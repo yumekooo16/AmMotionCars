@@ -31,7 +31,7 @@ export default function Services() {
         {/* Background: use next/image for better responsive handling */}
         <div className="absolute inset-0 w-full h-full" suppressHydrationWarning>
           <Image
-            src="/image/Voitures de luxe sous ciel couvert.webp"
+            src="/image/Voitures_de_luxe_sous_ciel_couvert.webp"
             alt="Services AM Motion"
             fill
             className="object-cover object-center brightness-50"

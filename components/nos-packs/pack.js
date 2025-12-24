@@ -29,15 +29,16 @@ const CategoryCard = memo(({ title, description, icon: Icon, href, flyerUrl }) =
 
         {/* Flyer si disponible */}
         {flyerUrl && (
-          <div className="mb-6 rounded-lg overflow-hidden shadow-lg">
+          <div className="w-full lg:w-3/10 lg:max-w-[600px] mx-auto mb-6 rounded-lg overflow-hidden shadow-lg">
             <Image
               src={flyerUrl}
               alt={`Tarif ${title}`}
-              width={400}
-              height={300}
+              width={850}
+              height={580}
               style={{ width: '100%', height: 'auto' }}
               loading="lazy"
-              quality={85}
+              quality={75}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 95vw, 600px"
             />
           </div>
         )}

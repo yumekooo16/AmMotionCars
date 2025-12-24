@@ -85,7 +85,7 @@ export default function Contact() {
       <section className="relative w-full h-screen overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
           <Image
-            src="/image/Voitures de luxe sous ciel couvert.webp"
+            src="/image/Voitures_de_luxe_sous_ciel_couvert.webp"
             alt="Contact AM Motion"
             fill
             className="object-cover object-center brightness-50"
