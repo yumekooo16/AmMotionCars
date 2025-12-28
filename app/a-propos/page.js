@@ -12,7 +12,7 @@ export default function Apropos() {
         <div className="absolute inset-0">
           <Image
             src="/image/a35xrs3.webp"
-            alt="À propos AM Motion"
+            alt="Équipe AM Motion Cars — Chauffeurs professionnels conciergerie automobile Paris"
             fill
             className="object-cover object-center brightness-50"
             priority
@@ -22,7 +22,7 @@ export default function Apropos() {
 
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white z-10 px-6">
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-wide">
-            À propos
+            À propos de AM Motion Cars
           </h1>
           <p className="text-base md:text-xl mt-4 md:mt-8 font-light max-w-3xl opacity-90">
             L&apos;excellence automobile au service de vos moments d&apos;exception
@@ -37,9 +37,23 @@ export default function Apropos() {
             L&apos;essence d&apos;AM Motion Cars
           </h2>
           <p className="text-lg md:text-xl leading-relaxed text-gray-400 font-light">
-            Fondée à Paris, AM Motion Cars est spécialisée dans la location de véhicules de prestige 
-            et la conciergerie automobile haut de gamme. Nous offrons bien plus qu&apos;un simple trajet : 
-            une expérience élégante, sur mesure et inoubliable, pensée pour une clientèle exigeante.
+            Fondée à Paris, AM Motion Cars est une conciergerie automobile de luxe 
+            spécialisée dans les services haut de gamme. Depuis nos débuts, nous avons 
+            bâti notre réputation sur trois piliers : excellence, discrétion, élégance.
+          </p>
+          
+          <p className="text-lg md:text-xl leading-relaxed text-gray-400 font-light mt-6">
+            Notre expertise repose sur une flotte de véhicules de prestige régulièrement 
+            renouvelée (Mercedes, Audi, BMW) et une équipe de chauffeurs professionnels 
+            formés aux standards du luxe. Chaque prestation est pensée pour dépasser les 
+            attentes de nos clients les plus exigeants.
+          </p>
+          
+          <p className="text-lg md:text-xl leading-relaxed text-gray-400 font-light mt-6">
+            Implantée au cœur de Paris et rayonnant sur toute l&apos;Île-de-France, nous 
+            accompagnons particuliers et entreprises dans leurs déplacements d&apos;exception : 
+            transferts VIP, mariages, séminaires, missions confidentielles. Notre ambition 
+            demeure constante : redéfinir les standards de la conciergerie automobile.
           </p>
         </div>
       </section>

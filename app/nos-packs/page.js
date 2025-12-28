@@ -50,7 +50,7 @@ export default function Tarifs() {
         <div className="absolute inset-0" suppressHydrationWarning>
           <Image
             src="/image/interieur_g43.webp"
-            alt="Packs conciergerie automobile Paris"
+            alt="Pack mariage — Location voiture prestige Paris conciergerie automobile"
             fill
             className="object-cover object-center brightness-50"
             priority
@@ -64,7 +64,7 @@ export default function Tarifs() {
           <div className="max-w-3xl space-y-6" suppressHydrationWarning>
             {/* H1 minimaliste */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-wide">
-              Packs & Tarifs
+              Packs et offres — Services automobile pour vos événements
             </h1>
 
             {/* Sous-titre avec séparateur premium */}
@@ -88,13 +88,27 @@ export default function Tarifs() {
       </section>
 
       {/* ============================================
-          TEXTE SEO - Ultra-discret
+          TEXTE SEO - Optimisé
           ============================================ */}
-      <section className="relative w-full bg-black py-10 px-6" suppressHydrationWarning>
-        <div className="max-w-2xl mx-auto text-center" suppressHydrationWarning>
-          <p className="text-gray-600 text-xs md:text-sm leading-relaxed font-light tracking-wide">
-            Packs sur mesure à Paris et en Île-de-France · 
-            Transferts VIP · Événements · Mariages · Prestations audiovisuelles
+      <section className="relative w-full bg-gradient-to-b from-black via-zinc-950 to-black py-16 px-6" suppressHydrationWarning>
+        <div className="max-w-4xl mx-auto space-y-6 text-gray-300 text-base md:text-lg leading-relaxed" suppressHydrationWarning>
+          <p>
+            AM Motion Cars propose des packs sur mesure pour tous vos événements. Mariages, 
+            séminaires, galas, réceptions : nous orchestrons vos déplacements automobiles 
+            avec élégance et discrétion.
+          </p>
+          
+          <p>
+            Pack Mariage : transfert mariés, navettes invités, photos avec véhicules prestige. 
+            Pack Corporate : mise à disposition flotte, transferts participants, chauffeurs dédiés. 
+            Pack Événements : location voiture de luxe, coordination logistique, service premium.
+          </p>
+          
+          <p>
+            Chaque pack inclut : véhicules récents et entretenus, chauffeurs professionnels 
+            formés, assurance tous risques, assistance 24/7. Personnalisables selon vos envies 
+            et budget, ces offres garantissent une expérience inoubliable. Obtenez un devis 
+            gratuit et découvrez comment nous pouvons sublimer votre événement.
           </p>
         </div>
       </section>

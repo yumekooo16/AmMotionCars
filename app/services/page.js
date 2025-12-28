@@ -32,7 +32,7 @@ export default function Services() {
         <div className="absolute inset-0 w-full h-full" suppressHydrationWarning>
           <Image
             src="/image/Voitures_de_luxe_sous_ciel_couvert.webp"
-            alt="Services de conciergerie automobile - Véhicules de prestige à Paris"
+            alt="Transfert aéroport Paris CDG — Chauffeur privé conciergerie automobile"
             fill
             className="object-cover object-center brightness-50"
             priority
@@ -45,7 +45,7 @@ export default function Services() {
           <div className="text-center text-white max-w-3xl space-y-6" suppressHydrationWarning>
             {/* H1 minimaliste */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-wide">
-              Services de Conciergerie
+              Services de conciergerie automobile à Paris
             </h1>
 
             {/* Sous-titre avec séparateur premium */}
@@ -70,6 +70,34 @@ export default function Services() {
       <VIP />
       <Audiovisuel />
       
+      {/* ============================================
+          TEXTE SEO - Optimisé
+          ============================================ */}
+      <section className="relative w-full bg-gradient-to-b from-black via-zinc-950 to-black py-16 px-6" suppressHydrationWarning>
+        <div className="max-w-4xl mx-auto space-y-6 text-gray-300 text-base md:text-lg leading-relaxed" suppressHydrationWarning>
+          <p>
+            AM Motion Cars propose une gamme complète de services automobiles haut de 
+            gamme à Paris et en Île-de-France. Notre conciergerie automobile s&apos;adresse 
+            aux clients exigeants recherchant prestiges, discrétion et expertise.
+          </p>
+          
+          <p>
+            Parmi nos services : location de voitures de luxe avec chauffeur privé, 
+            transferts VIP vers les aéroports parisiens (CDG, Orly, Le Bourget), mises 
+            à disposition pour événements, mariages et séminaires corporate. Chaque 
+            prestation est personnalisée et orchestrée avec attention.
+          </p>
+          
+          <p>
+            Nos chauffeurs professionnels sont formés aux standards du luxe et connaissent 
+            parfaitement les routes de Paris et sa région. Nos véhicules — Mercedes, Audi, 
+            BMW — sont régulièrement entretenus et inspectés pour garantir sécurité et 
+            confort. Disponibles 24h/24, 7j/7, nous assurons la réussite de chaque 
+            mission.
+          </p>
+        </div>
+      </section>
+
       {/* ============================================
           CTA FINAL - Minimaliste et élégant
           ============================================ */}

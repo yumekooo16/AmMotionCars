@@ -105,7 +105,7 @@ export default function Contact() {
           <div className="absolute inset-0 w-full h-full">
             <Image
               src="/image/Voitures_de_luxe_sous_ciel_couvert.webp"
-              alt="Contact AM Motion Cars - Conciergerie automobile de luxe à Paris"
+              alt="Contact AM Motion Cars — Bureau conciergerie automobile Paris 75017"
               fill
               className="object-cover object-center brightness-[0.35]"
               priority
@@ -527,6 +527,30 @@ export default function Contact() {
               </div>
             </div>
 
+          </div>
+        </section>
+
+        {/* Section SEO Texte */}
+        <section className="bg-gradient-to-b from-black via-zinc-950 to-black text-white py-24 px-6">
+          <div className="max-w-4xl mx-auto space-y-6 text-gray-300 text-base md:text-lg leading-relaxed">
+            <p>
+              Contactez AM Motion Cars pour discuter de vos besoins en conciergerie 
+              automobile. Notre équipe est disponible 24/7 pour répondre à vos demandes, 
+              offrir des devis gratuits et planifier votre prestation.
+            </p>
+            
+            <p>
+              Que ce soit pour une réservation urgente, une demande spécifique ou une 
+              question sur nos services, nous sommes à votre écoute. Réponse garantie 
+              sous 24h.
+            </p>
+            
+            <p>
+              Trois façons de nous joindre : formulaire en ligne (réponse sous 24h), 
+              WhatsApp pour une demande immédiate (+33 7 75 77 53 89), ou email 
+              (contact@ammotioncars.com). Situés au cœur de Paris, nous intervenons 
+              dans toute l&apos;Île-de-France et au-delà selon vos besoins.
+            </p>
           </div>
         </section>
 

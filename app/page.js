@@ -35,7 +35,7 @@ export default function Page() {
         <div className="absolute inset-0" suppressHydrationWarning>
           <Image
             src="/image/audiRS6.webp"
-            alt="Conciergerie automobile de luxe Paris - AM Motion Cars"
+            alt="Conciergerie automobile de luxe Paris — berline de prestige AM Motion Cars"
             fill
             className="object-cover object-center brightness-50"
             priority
@@ -47,7 +47,7 @@ export default function Page() {
         <div className="relative z-10 h-full flex items-center justify-center px-4 md:px-8 lg:px-16">
           <div className="text-center text-white max-w-3xl">
             <h1 className="text-3xl md:text-5xl lg:text-7xl font-light tracking-wide mb-4">
-              Conciergerie automobile à Paris
+              Conciergerie automobile de luxe à Paris
             </h1>
             <p className="text-base md:text-xl lg:text-2xl mt-4 mb-6 leading-relaxed">
                 AM Motion Cars · Transferts privés · Chauffeurs · 24/7
@@ -65,9 +65,7 @@ export default function Page() {
       <section className="relative w-full bg-black text-white flex flex-col justify-center items-center py-10 px-4 md:px-8" suppressHydrationWarning>
         <div className="max-w-4xl text-center" suppressHydrationWarning>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-wide mb-12">
-            Votre conciergerie <br /><span className="text-[#5f6364]">automobile premium</span>
-            <br />
-            à Paris et en Île-de-France
+            Nos Services Premium
           </h2>
 
           <div className="space-y-6 max-w-2xl mx-auto" suppressHydrationWarning>
@@ -76,7 +74,7 @@ export default function Page() {
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
               <div>
-                <h3 className="text-xl md:text-2xl font-medium">Adaptabilité</h3>
+                <h3 className="text-xl md:text-2xl font-medium">Location de véhicules de prestige</h3>
               </div>
             </div>
 
@@ -85,7 +83,7 @@ export default function Page() {
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
               <div>
-                <h3 className="text-xl md:text-2xl font-medium">Disponibilité 24/7</h3>
+                <h3 className="text-xl md:text-2xl font-medium">Transferts VIP avec chauffeur privé</h3>
               </div>
             </div>
 
@@ -94,7 +92,7 @@ export default function Page() {
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
               <div>
-                <h3 className="text-xl md:text-2xl font-medium">Efficacité</h3>
+                <h3 className="text-xl md:text-2xl font-medium">Conciergerie pour événements et mariages</h3>
               </div>
             </div>
           </div>
@@ -105,22 +103,24 @@ export default function Page() {
       <section className="relative w-full bg-gradient-to-b from-black to-gray-900 text-white py-16 md:py-24 px-4 md:px-8" suppressHydrationWarning>
         <div className="max-w-4xl mx-auto" suppressHydrationWarning>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-wide mb-8 text-center">
-            Votre conciergerie automobile <br /><span className="text-[#5f6364]">à Paris</span>
+            Pourquoi choisir AM Motion Cars
           </h2>
           
           <div className="space-y-6 text-gray-300 text-base md:text-lg leading-relaxed" suppressHydrationWarning>
             <p>
-              AM Motion Cars est une <strong>conciergerie automobile de luxe</strong> basée à Paris, 
-              spécialisée dans les transferts premium et la location de véhicules haut de gamme avec chauffeur. 
-              Nous accompagnons une clientèle VIP, des entreprises et des particuliers exigeants pour leurs 
-              déplacements en Île-de-France et au-delà.
+              AM Motion Cars est la <strong>conciergerie automobile de luxe</strong> de référence à Paris. 
+              Spécialisée dans la location de véhicules de prestige et les transferts VIP, 
+              nous offrons des services automobiles sur mesure pour une clientèle exigeante.
             </p>
             
             <p>
-              Notre service de <strong>conciergerie automobile à Paris</strong> se distingue par sa disponibilité 
-              24/7, sa flotte de véhicules d'exception et l'expertise de nos chauffeurs professionnels. 
-              Que ce soit pour un événement d'entreprise, un mariage, un transfert aéroport ou une mise à 
-              disposition longue durée, nous personnalisons chaque prestation selon vos besoins.
+              Notre flotte comprend des berlines haut de gamme, SUV de luxe et véhicules 
+              d'exception (Mercedes, Audi, BMW). Chaque prestation est orchestrée avec 
+              discrétion et professionnalisme. Que vous cherchiez un <strong>chauffeur privé</strong> pour 
+              une réunion professionnelle, un <strong>transfert</strong> vers les aéroports parisiens (CDG, 
+              Orly), ou une location pour un événement, nous garantissons confort et 
+              élégance. Nos chauffeurs professionnels connaissent parfaitement Paris et 
+              l'Île-de-France. Disponibles 24h/24, 7j/7.
             </p>
             
             <div className="pt-8 text-center">

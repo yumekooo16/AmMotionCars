@@ -48,3 +48,11 @@ babel.config.js
 eslint.config.mjs
 
 PERFORMANCE_GUIDE.md
+
+SEO_GUIDE.md
+
+TAILWIND_GUIDE.md
+tsconfig.json
+tsconfig.paths.json
+webpack.config.js
+jest.config.js
