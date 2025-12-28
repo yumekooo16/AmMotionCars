@@ -71,60 +71,101 @@ export default function Services() {
       <Audiovisuel />
       
       {/* ============================================
-          TEXTE SEO - Optimisé
+          SECTION FINALE UNIFIÉE - SEO + CTA
           ============================================ */}
-      <section className="relative w-full bg-gradient-to-b from-black via-zinc-950 to-black py-16 px-6" suppressHydrationWarning>
-        <div className="max-w-4xl mx-auto space-y-6 text-gray-300 text-base md:text-lg leading-relaxed" suppressHydrationWarning>
-          <p>
-            AM Motion Cars propose une gamme complète de services automobiles haut de 
-            gamme à Paris et en Île-de-France. Notre conciergerie automobile s&apos;adresse 
-            aux clients exigeants recherchant prestiges, discrétion et expertise.
-          </p>
+      <section className="relative w-full bg-black py-32 px-6 overflow-hidden" suppressHydrationWarning>
+        {/* Fond avec effets de lumière subtils */}
+        <div className="absolute inset-0" suppressHydrationWarning>
+          {/* Gradient radial pour effet de lumière central */}
+          <div 
+            className="absolute inset-0" 
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(39, 39, 42, 0.5) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 1) 100%)'
+            }}
+          />
           
-          <p>
-            Parmi nos services : location de voitures de luxe avec chauffeur privé, 
-            transferts VIP vers les aéroports parisiens (CDG, Orly, Le Bourget), mises 
-            à disposition pour événements, mariages et séminaires corporate. Chaque 
-            prestation est personnalisée et orchestrée avec attention.
-          </p>
+          {/* Effet de grille très subtil */}
+          <div className="absolute inset-0 opacity-[0.03]" suppressHydrationWarning>
+            <div 
+              className="absolute inset-0" 
+              style={{
+                backgroundImage: 'linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px)',
+                backgroundSize: '60px 60px'
+              }}
+            />
+          </div>
           
-          <p>
-            Nos chauffeurs professionnels sont formés aux standards du luxe et connaissent 
-            parfaitement les routes de Paris et sa région. Nos véhicules — Mercedes, Audi, 
-            BMW — sont régulièrement entretenus et inspectés pour garantir sécurité et 
-            confort. Disponibles 24h/24, 7j/7, nous assurons la réussite de chaque 
-            mission.
-          </p>
+          {/* Lignes de lumière subtiles horizontales */}
+          <div className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-zinc-800/20 to-transparent" />
+          <div className="absolute bottom-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-zinc-800/20 to-transparent" />
         </div>
-      </section>
 
-      {/* ============================================
-          CTA FINAL - Minimaliste et élégant
-          ============================================ */}
-      <section className="relative w-full bg-gradient-to-b from-gray-950 to-black py-24 px-6" suppressHydrationWarning>
-        <div className="max-w-4xl mx-auto text-center space-y-10" suppressHydrationWarning>
+        <div className="relative max-w-5xl mx-auto z-10" suppressHydrationWarning>
           
-          {/* Titre principal */}
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-light text-white tracking-wide leading-relaxed">
-            L&apos;excellence automobile
-            <br />
-            à votre service
-          </h2>
+          {/* En-tête de section premium */}
+          <div className="text-center mb-20 space-y-8" suppressHydrationWarning>
+            <div className="flex items-center justify-center gap-4 mb-6" suppressHydrationWarning>
+              <div className="w-20 h-px bg-gradient-to-r from-transparent via-zinc-700/50 to-transparent" />
+              <div className="w-2 h-2 rounded-full bg-zinc-700/50" />
+              <div className="w-20 h-px bg-gradient-to-r from-transparent via-zinc-700/50 to-transparent" />
+            </div>
+            
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-wide text-white">
+              L&apos;excellence automobile
+              <br />
+              <span className="text-[#5f6364]">à votre service</span>
+            </h2>
+            
+            <div className="w-32 h-px bg-gradient-to-r from-transparent via-zinc-800/30 to-transparent mx-auto" />
+          </div>
 
-          {/* Texte subtil avec SEO */}
-          <p className="text-gray-500 text-sm md:text-base font-light max-w-xl mx-auto">
-            Paris · Île-de-France · Service 24/7
-          </p>
+          {/* Texte SEO dans un conteneur avec bordure subtile */}
+          <div className="max-w-4xl mx-auto mb-20" suppressHydrationWarning>
+            <div className="relative p-8 md:p-12 border border-zinc-900/50 bg-zinc-950/20 backdrop-blur-sm rounded-lg" suppressHydrationWarning>
+              {/* Effet de lumière sur les bords */}
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-zinc-900/0 via-zinc-900/0 to-zinc-800/10 pointer-events-none" />
+              
+              <div className="relative space-y-6 text-gray-300 text-base md:text-lg leading-relaxed" suppressHydrationWarning>
+                <p>
+                  AM Motion Cars propose une gamme complète de services automobiles haut de 
+                  gamme à Paris et en Île-de-France. Notre conciergerie automobile s&apos;adresse 
+                  aux clients exigeants recherchant prestiges, discrétion et expertise.
+                </p>
+                
+                <p>
+                  Parmi nos services : location de voitures de luxe avec chauffeur privé, 
+                  transferts VIP vers les aéroports parisiens (CDG, Orly, Le Bourget), mises 
+                  à disposition pour événements, mariages et séminaires corporate. Chaque 
+                  prestation est personnalisée et orchestrée avec attention.
+                </p>
+                
+                <p>
+                  Nos chauffeurs professionnels sont formés aux standards du luxe et connaissent 
+                  parfaitement les routes de Paris et sa région. Nos véhicules — Mercedes, Audi, 
+                  BMW — sont régulièrement entretenus et inspectés pour garantir sécurité et 
+                  confort. Disponibles 24h/24, 7j/7, nous assurons la réussite de chaque 
+                  mission.
+                </p>
+              </div>
+            </div>
+          </div>
 
-          {/* Bouton CTA élégant */}
-          <div className="pt-6">
+          {/* Séparateur élégant */}
+          <div className="flex items-center justify-center gap-6 mb-12" suppressHydrationWarning>
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-zinc-800/40 to-transparent" />
+            <span className="text-xs tracking-[0.3em] uppercase text-zinc-400 font-light">Paris · Île-de-France · Service 24/7</span>
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-zinc-800/40 to-transparent" />
+          </div>
+
+          {/* CTA élégant et harmonisé */}
+          <div className="text-center" suppressHydrationWarning>
             <Link href="/nos-packs">
               <button 
-                className="group relative inline-flex items-center gap-3 bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-[#5f6364]/50 rounded-2xl px-10 py-5 text-base md:text-lg text-white font-light transition-all duration-500 overflow-hidden"
+                className="group relative inline-flex items-center gap-3 bg-white text-black px-12 py-6 text-base md:text-lg font-light tracking-wide transition-all duration-500 overflow-hidden hover:bg-zinc-100 hover:shadow-lg hover:shadow-white/10"
                 aria-label="Découvrir nos packs de conciergerie automobile"
               >
                 {/* Effet de brillance au hover */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-200 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
                 
                 <span className="relative">Découvrir nos packs</span>
                 
