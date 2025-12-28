@@ -36,7 +36,7 @@ export default function Evenements() {
       <div className="w-full flex justify-center mb-6">
         <Image
           src="/image/amggtcevent.webp"
-          alt="Mercedes amg gtc pour decrire les Événement AM Motion"
+          alt="Mercedes amg gtc pour decrire les Évènement AM Motion"
           width={800}
           height={600}
           className="w-full max-w-md md:max-w-lg rounded-2xl shadow-lg object-cover"
@@ -44,8 +44,8 @@ export default function Evenements() {
         />
       </div>
 
-      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-white mb-3">Événements</h2>
-      <p className="text-sm md:text-base lg:text-lg text-center text-white font-light max-w-2xl">Parfait pour vos événements privés et professionnels (mariages, anniversaires, etc.)</p>
+      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-white mb-3">Évènement</h2>
+      <p className="text-sm md:text-base lg:text-lg text-center text-white font-light max-w-2xl">Parfait pour vos évènement privés et professionnels (mariages, anniversaires, etc.)</p>
     </section>
   );
 }
