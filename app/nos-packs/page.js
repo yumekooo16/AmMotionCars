@@ -9,7 +9,7 @@ import { createClient } from "@supabase/supabase-js";
 const Mercedes = dynamic(() => import("@/components/nos-packs/pack.js"), {
   loading: () => (
     <div className="flex justify-center items-center py-20">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5f6364]"></div>
     </div>
   ),
   ssr: false
@@ -42,11 +42,15 @@ export default function Tarifs() {
 
   return (
     <>
-      <section className="relative w-full h-screen overflow-hidden">
-        <div className="absolute inset-0">
+      {/* ============================================
+          SECTION HERO - Ultra-épurée
+          ============================================ */}
+      <section className="relative w-full h-screen overflow-hidden" suppressHydrationWarning>
+        {/* Background Image */}
+        <div className="absolute inset-0" suppressHydrationWarning>
           <Image
-            src="/image/interieur g43.webp" // ✅ Renommez le fichier
-            alt="Intérieur véhicule de luxe Mercedes"
+            src="/image/interieur_g43.webp"
+            alt="Packs conciergerie automobile Paris"
             fill
             className="object-cover object-center brightness-50"
             priority
@@ -55,22 +59,49 @@ export default function Tarifs() {
           />
         </div>
 
-        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-8 lg:px-16 text-center text-white">
-          <div className="max-w-3xl">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-wide mb-4">
-              Nos Pack & Tarifs indicatifs
+        {/* Contenu Hero */}
+        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-8 lg:px-16 text-center text-white" suppressHydrationWarning>
+          <div className="max-w-3xl space-y-6" suppressHydrationWarning>
+            {/* H1 minimaliste */}
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-wide">
+              Packs & Tarifs
             </h1>
-            <p className="text-base md:text-2xl mt-4 mb-6">
-              Chaque trajet <br className="hidden md:block" /> mérite son expérience de <br />
-              <span className="text-[#5f6364] font-semibold">luxe</span>.
+
+            {/* Sous-titre avec séparateur premium */}
+            <p className="text-lg md:text-2xl lg:text-3xl font-light text-gray-200">
+              Conciergerie automobile · Paris
             </p>
-            <p className="text-base md:text-xl lg:text-2xl leading-relaxed text-gray-300 font-light">
-              Pour toute réservation, veuillez cliquer sur le véhicule souhaité
+
+            {/* Instruction élégante */}
+            <p className="text-sm md:text-base text-gray-400 font-light pt-4">
+              Sélectionnez votre formule
             </p>
+
+            {/* Scroll indicator */}
+            <div className="pt-12 animate-bounce">
+              <svg className="w-6 h-6 mx-auto text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* ============================================
+          TEXTE SEO - Ultra-discret
+          ============================================ */}
+      <section className="relative w-full bg-black py-10 px-6" suppressHydrationWarning>
+        <div className="max-w-2xl mx-auto text-center" suppressHydrationWarning>
+          <p className="text-gray-600 text-xs md:text-sm leading-relaxed font-light tracking-wide">
+            Packs sur mesure à Paris et en Île-de-France · 
+            Transferts VIP · Événements · Mariages · Prestations audiovisuelles
+          </p>
+        </div>
+      </section>
+
+      {/* ============================================
+          COMPOSANT VÉHICULES
+          ============================================ */}
       <Mercedes />
     </>
   );
