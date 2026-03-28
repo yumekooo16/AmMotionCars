@@ -17,22 +17,21 @@ function getSupabase() {
 
 export async function GET(request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const marque = searchParams.get('marque');
+    const marque = request.nextUrl.searchParams.get('marque');
 
     if (!marque) {
       return new Response(
-        JSON.stringify({ success: false, error: 'Paramètre marque manquant' }), 
+        JSON.stringify({ success: false, error: 'Paramètre marque manquant' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
     const marquesAutorisees = ['mercedes', 'audi', 'bmw', 'porsche', 'volkswagen'];
     const marqueNormalisee = marque.toLowerCase();
-    
+
     if (!marquesAutorisees.includes(marqueNormalisee)) {
       return new Response(
-        JSON.stringify({ success: false, error: 'Marque non autorisée' }), 
+        JSON.stringify({ success: false, error: 'Marque non autorisée' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -48,13 +47,13 @@ export async function GET(request) {
     if (error) {
       console.error(`⚠️ Erreur véhicules ${marque}:`, error);
       return new Response(
-        JSON.stringify({ success: false, error: error.message }), 
+        JSON.stringify({ success: false, error: error.message }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
     return new Response(
-      JSON.stringify({ success: true, vehicules: data || [] }), 
+      JSON.stringify({ success: true, vehicules: data || [] }),
       {
         status: 200,
         headers: {
@@ -67,7 +66,7 @@ export async function GET(request) {
   } catch (err) {
     console.error("❌ Erreur serveur:", err);
     return new Response(
-      JSON.stringify({ success: false, error: 'Erreur serveur' }), 
+      JSON.stringify({ success: false, error: 'Erreur serveur' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
