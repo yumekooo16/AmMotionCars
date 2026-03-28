@@ -31,7 +31,7 @@ export default function Evenement() {
       style={{ height: "100svh" }}
     >
       <img
-        src="/image/ManClassG.jpeg"
+        src="/image/ManClassg.jpeg"
         alt="Événements de luxe — Mariages et galas Paris"
         className="absolute inset-0 w-full h-full object-cover"
       />

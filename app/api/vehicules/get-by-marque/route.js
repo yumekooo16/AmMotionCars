@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 export const runtime = "nodejs";
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 let supabaseInstance = null;
 
@@ -20,7 +20,6 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const marque = searchParams.get('marque');
 
-    // ✅ Validation
     if (!marque) {
       return new Response(
         JSON.stringify({ success: false, error: 'Paramètre marque manquant' }), 
@@ -28,7 +27,6 @@ export async function GET(request) {
       );
     }
 
-    // ✅ Sécurité : whitelist des marques autorisées
     const marquesAutorisees = ['mercedes', 'audi', 'bmw', 'porsche', 'volkswagen'];
     const marqueNormalisee = marque.toLowerCase();
     
@@ -41,7 +39,6 @@ export async function GET(request) {
 
     const supabase = getSupabase();
 
-    // ✅ Requête filtrée par marque
     const { data, error } = await supabase
       .from('vehicules')
       .select('id, nom, marque, image_url')
