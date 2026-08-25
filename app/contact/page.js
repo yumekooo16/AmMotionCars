@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { supabaseClient as supabase } from '@/lib/supabaseClient';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -21,16 +20,6 @@ export default function Contact() {
     setIsSubmitting(true);
     setSubmitStatus(null);
     try {
-      const { error: supabaseError } = await supabase
-        .from('contacts')
-        .insert([{
-          nom: formData.nom, prenom: formData.prenom, email: formData.email,
-          telephone: formData.telephone, service: formData.service,
-          date: formData.date || null, message: formData.message,
-          created_at: new Date().toISOString()
-        }]);
-      if (supabaseError) throw new Error("Erreur lors de l'enregistrement Supabase");
-
       const emailResponse = await fetch('/api/sendContact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

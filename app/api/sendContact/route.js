@@ -1,8 +1,31 @@
 import { Resend } from "resend";
+import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function POST(req) {
   try {
     const data = await req.json();
+
+    const { nom, prenom, email, telephone, service, date, message } = data;
+    if (!nom || !prenom || !email || !telephone || !service || !message) {
+      return Response.json({ message: "Champs obligatoires manquants" }, { status: 400 });
+    }
+
+    const supabase = getSupabaseAdmin();
+    const { error: dbError } = await supabase.from("contacts").insert([{
+      nom,
+      prenom,
+      email,
+      telephone,
+      service,
+      date: date || null,
+      message,
+      created_at: new Date().toISOString(),
+    }]);
+
+    if (dbError) {
+      console.error("Erreur Supabase contacts:", dbError);
+      return Response.json({ message: "Erreur lors de l'enregistrement" }, { status: 500 });
+    }
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 

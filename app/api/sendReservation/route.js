@@ -1,8 +1,44 @@
 import { Resend } from "resend";
+import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function POST(req) {
   try {
     const data = await req.json();
+
+    const {
+      nom, prenom, email, telephone,
+      dateDebut, dateFin, lieuPrise, message, vehicule,
+    } = data;
+
+    if (!nom || !prenom || !email || !telephone || !dateDebut || !dateFin) {
+      return new Response(
+        JSON.stringify({ message: "Champs obligatoires manquants" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const supabase = getSupabaseAdmin();
+    const { error: dbError } = await supabase.from("reservations").insert([{
+      nom,
+      prenom,
+      email,
+      telephone,
+      date_debut: dateDebut,
+      date_fin: dateFin,
+      lieu_prise: lieuPrise || null,
+      message: message || null,
+      vehicule: vehicule || "Non spécifié",
+      consent_given: true,
+      consent_date: new Date().toISOString(),
+    }]);
+
+    if (dbError) {
+      console.error("Erreur Supabase reservations:", dbError);
+      return new Response(
+        JSON.stringify({ message: "Erreur lors de l'enregistrement" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 
