@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { supabaseClient as supabase } from '@/lib/supabaseClient';
 
 export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
   const [formData, setFormData] = useState({
@@ -33,15 +32,6 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
     setIsSubmitting(true);
     setErrorMsg('');
     try {
-      const { error } = await supabase.from('reservations').insert([{
-        nom: formData.nom, prenom: formData.prenom, email: formData.email,
-        telephone: formData.telephone, date_debut: formData.dateDebut,
-        date_fin: formData.dateFin, lieu_prise: formData.lieuPrise,
-        message: formData.message, vehicule: vehicule || 'Non spécifié',
-        consent_given: true, consent_date: new Date().toISOString(),
-      }]);
-      if (error) throw error;
-
       const response = await fetch('/api/sendReservation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -49,7 +39,7 @@ export default function ModalReservation({ isOpen, onClose, vehicule = null }) {
       });
       if (!response.ok) {
         const data = await response.json().catch(() => ({ message: 'Erreur inconnue du serveur' }));
-        throw new Error(data.message || "Erreur lors de l'envoi de l'email");
+        throw new Error(data.message || "Erreur lors de l'envoi de votre demande");
       }
       setShowSuccess(true);
       resetForm();
